@@ -201,7 +201,7 @@ function systemai_get_achievement_catalog(): array
         ],
         'zero_gold_broke' => [
             'title' => 'Penniless & Pathetic!',
-            'desc' => 'Zero Gold Credits in your pockets AND zero in Orren''s vault! Even the goblin beggars are tossing spare change at you out of pity.',
+            'desc' => 'Zero Gold Credits in your pockets AND zero in Orren\'s vault! Even the goblin beggars are tossing spare change at you out of pity.',
             'reward_text' => 'You have received a Bronze Welfare Box!',
             'boxes' => ['bronze' => 1],
             'hidden' => true,
@@ -221,7 +221,7 @@ function systemai_get_achievement_catalog(): array
             'hidden' => true,
         ],
         'death_ten_times' => [
-            'title' => 'Borant''s Favorite Punching Bag!',
+            'title' => 'Borant\'s Favorite Punching Bag!',
             'desc' => 'Ten televised deaths! The Reconstruction Bay technicians named a cryo-tube after you and installed a punch-card machine by the door.',
             'reward_text' => 'You have received a Gold Pity Box!',
             'boxes' => ['gold' => 1],
@@ -256,7 +256,7 @@ function systemai_get_achievement_catalog(): array
             'hidden' => true,
         ],
         'quest_grinder_10' => [
-            'title' => 'Mordecai''s Teacher''s Pet!',
+            'title' => 'Mordecai\'s Teacher\'s Pet!',
             'desc' => 'Ten Bopca Safe Room Floor Quests completed! You actually read the quest board instead of just blowing up hallways like a normal anarchist.',
             'reward_text' => 'You have received a Silver Quest-Master Box!',
             'boxes' => ['silver' => 1],
