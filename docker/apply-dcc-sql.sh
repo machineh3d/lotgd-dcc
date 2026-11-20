@@ -37,7 +37,8 @@ echo "[SYSTEM AI] Setting defaultskin = dcc_hud_minimal..."
 run_sql << 'EOF'
 INSERT INTO settings (setting, value) VALUES ('defaultskin', 'dcc_hud_minimal')
 ON DUPLICATE KEY UPDATE value = 'dcc_hud_minimal';
-UPDATE modules SET active = 0 WHERE modulename IN ('raceelf', 'racedwarf', 'racetroll', 'racehuman', 'oldman', 'statue', 'fairy');
+DELETE FROM module_hooks WHERE modulename IN ('raceelf', 'racedwarf', 'racetroll', 'racehuman', 'oldman', 'statue', 'fairy');
+DELETE FROM modules WHERE modulename IN ('raceelf', 'racedwarf', 'racetroll', 'racehuman', 'oldman', 'statue', 'fairy');
 EOF
 
 if docker ps --format '{{.Names}}' | grep -qx "${WEB_CONTAINER}"; then

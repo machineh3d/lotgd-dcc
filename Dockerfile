@@ -10,7 +10,14 @@ LABEL org.opencontainers.image.title="Dungeon Crawler Carl — LotGD Total Conve
       org.opencontainers.image.source="https://github.com/machineh3d/lotgd-dcc" \
       org.opencontainers.image.licenses="MIT"
 
-# 1. Bake all DCC PHP 8.4/8.5 modules into /var/www/html/modules/
+# 1. Remove conflicting stock fantasy modules & bake all 13 DCC PHP 8.4/8.5 modules
+RUN rm -f /var/www/html/modules/raceelf.php \
+          /var/www/html/modules/racedwarf.php \
+          /var/www/html/modules/racetroll.php \
+          /var/www/html/modules/racehuman.php \
+          /var/www/html/modules/oldman.php \
+          /var/www/html/modules/statue.php \
+          /var/www/html/modules/fairy.php
 COPY modules/*.php /var/www/html/modules/
 
 # 2. Bake SQL lore packs & helper script for post-install / upgrade seeding

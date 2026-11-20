@@ -1,5 +1,15 @@
 # Changelog
 
+## [v0.3.5-alpha] - 2026-11-19
+
+### Changed
+- **Stripped Stock Medieval Modules at Build Time (`Dockerfile`, `install.sh`, `docker/apply-dcc-sql.sh`)**: Removes `raceelf.php`, `racedwarf.php`, `racetroll.php`, `racehuman.php`, `oldman.php`, `statue.php`, and `fairy.php` from `/var/www/html/modules/` during image build so `installer.php` never pre-installs stock fantasy races.
+
+## [v0.3.4-alpha] - 2026-11-19
+
+### Fixed
+- **Docker State Persistence & NB-Core Entrypoint Compatibility (`docker-compose.yml`, `.env.example`)**: Added persistent `dcc_state:/var/lib/lotgd` volume (so `dbconnect.php` and `installation-complete` survive rebuilds/updates), passed required `MYSQL_*` variables and `LOTGD_INSTALL_ENABLED` to `dcc-web`, and documented generating non-example secrets via `openssl`.
+
 ## [v0.3.3-alpha] - 2026-11-19
 
 ### Added

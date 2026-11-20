@@ -1,7 +1,10 @@
 # ============================================================================
 # DUNGEON CRAWLER CARL — PRE-BAKED DOCKER COMPOSE STACK
-# Copy .env.example to .env and replace all YOUR_* placeholders before running:
-#   docker compose up -d --build
+# 1. Copy .env.example to .env and generate real DB_PASS / DB_ROOT_PASS secrets:
+#      openssl rand -base64 24 | tr -dc 'A-Za-z0-9' | head -c 24
+# 2. Launch:
+#      docker compose up -d --build
+# 3. Open http://<server-ip>:<APP_PORT>/installer.php (DB Host: dcc-db)
 # ============================================================================
 services:
   dcc-web:
@@ -19,7 +22,13 @@ services:
         condition: service_healthy
     environment:
       TZ: ${TZ:-UTC}
+      LOTGD_INSTALL_ENABLED: ${LOTGD_INSTALL_ENABLED:-1}
+      MYSQL_HOST: dcc-db
+      MYSQL_DATABASE: ${DB_NAME:?Set DB_NAME in .env}
+      MYSQL_USER: ${DB_USER:?Set DB_USER in .env}
+      MYSQL_PASSWORD: ${DB_PASS:?Set DB_PASS in .env}
     volumes:
+      - dcc_state:/var/lib/lotgd
       - dcc_cache:/var/www/html/cache
       - dcc_config:/var/www/html/config
     networks:
@@ -47,6 +56,7 @@ services:
 
 volumes:
   dcc_db_data:
+  dcc_state:
   dcc_cache:
   dcc_config:
 
