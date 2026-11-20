@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.6-alpha] - 2026-11-19
+
+### Added
+- **Complete Core Page Immersion Pass (`sql/lotgd_dcc_shop_dialogue.sql`)**: Set `gamename = Dungeon Crawler World: Earth` for the top site banner, and added exact `translations` overrides for `home.php` (pre-login broadcast welcome), `forest.php`/`Forest.php` (World Dungeon Corridors), `mail.php` (Syndicate Crawler Comms), `account.php` (Floors Descended & Stairwell Stat Points), and `clan.php`/`pages/clan/` (Faction Wars Command & Crawler Parties).
+
 ## [v0.3.5-alpha] - 2026-11-19
 
 ### Changed

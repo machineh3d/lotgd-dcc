@@ -1,6 +1,6 @@
-# Dungeon Crawler Carl — Total Conversion Pack for LotGD (`v0.3.5-alpha`)
+# Dungeon Crawler Carl — Total Conversion Pack for LotGD (`v0.3.6-alpha`)
 
-> **Release Status:** `v0.3.5-alpha` (Alpha) — Tested on **NB-Core LotGD v2.0.9+ / PHP 8.4 & 8.5 / MariaDB 10.6+ or MySQL 8.0+**.
+> **Release Status:** `v0.3.6-alpha` (Alpha) — Tested on **NB-Core LotGD v2.0.9+ / PHP 8.4 & 8.5 / MariaDB 10.6+ or MySQL 8.0+**.
 
 A complete **Dungeon Crawler Carl** total conversion for **Legend of the Green Dragon ([NB-Core/lotgd](https://github.com/NB-Core/lotgd))**, featuring 4 database lore & dialogue SQL packs, 13 custom PHP 8.4/8.5 gameplay modules, 2 dark-terminal Twig HUD themes, a pre-baked Docker stack, and an automated GitHub CI/Release pipeline.
 
@@ -16,7 +16,7 @@ A complete **Dungeon Crawler Carl** total conversion for **Legend of the Green D
 
 ```
 lotgd-dcc-pack/
-├── VERSION                             # 0.3.5-alpha
+├── VERSION                             # 0.3.6-alpha
 ├── CHANGELOG.md                        # Full version history
 ├── README.md                           # Installation, upgrade & release guide
 ├── install.sh                          # One-command installer for existing Docker or bare-metal servers
@@ -185,7 +185,7 @@ git pull
 To publish a new versioned release with an automatically built `.zip` attachment:
 
 ```
-git tag v0.3.5-alpha
-git push origin v0.3.5-alpha
+git tag v0.3.6-alpha
+git push origin v0.3.6-alpha
 
 ```
