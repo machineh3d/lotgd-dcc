@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.4.3-alpha)
+# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.5.0-alpha)
 # Target Engine: Fresh LotGD NB-Core v2.0.9+ (PHP 8.4 / 8.5)
 # Repository: https://github.com/machineh3d/lotgd-dcc
 # ============================================================================
@@ -115,14 +115,14 @@ for sql_file in lotgd_dcc_total_conversion.sql lotgd_dcc_mounts.sql lotgd_dcc_ta
 done
 
 # 3. Install PHP 8.4/8.5 Modules
-info "Installing 13 DCC PHP modules into ${LOTGD_ROOT}/modules/..."
+info "Installing 14 DCC PHP modules into ${LOTGD_ROOT}/modules/..."
 run_web "mkdir -p '${LOTGD_ROOT}/modules'"
 for mod in "${SCRIPT_DIR}"/modules/*.php; do
     mod_name="$(basename "${mod}")"
     copy_to_web "${mod}" "${LOTGD_ROOT}/modules/${mod_name}"
 done
 run_web "rm -f '${LOTGD_ROOT}/modules/raceelf.php' '${LOTGD_ROOT}/modules/racedwarf.php' '${LOTGD_ROOT}/modules/racetroll.php' '${LOTGD_ROOT}/modules/racehuman.php' '${LOTGD_ROOT}/modules/oldman.php' '${LOTGD_ROOT}/modules/statue.php' '${LOTGD_ROOT}/modules/fairy.php' '${LOTGD_ROOT}/modules/specialtydarkarts.php' '${LOTGD_ROOT}/modules/specialtymysticpower.php' '${LOTGD_ROOT}/modules/specialtythiefskills.php' && chmod 0644 '${LOTGD_ROOT}/modules/'*.php"
-ok "All 13 modules installed."
+ok "All 14 modules installed."
 
 # 4. Build & Install NB-Core Twig Themes (dcc_hud & dcc_hud_minimal)
 info "Installing Twig themes (dcc_hud & dcc_hud_minimal) from aurora base..."
@@ -170,7 +170,7 @@ ok "Cache cleared!"
 echo -e "${GREEN}============================================================================${NC}"
 echo -e "${GREEN}NEW ACHIEVEMENT! Dungeon Crawler Carl v${RELEASE_VER} Installed!${NC}"
 echo -e "1. Log into Superuser Grotto -> Manage Modules -> 'Dungeon Crawler World'."
-echo -e "2. Install & Activate all 13 DCC modules."
+echo -e "2. Install & Activate all 14 DCC modules."
 echo -e "3. Stock medieval modules (raceelf, racedwarf, racetroll, racehuman, oldman, statue, fairy) were deactivated automatically!"
 echo -e "4. Hard-refresh your browser (Ctrl+F5)!"
 echo -e "${GREEN}============================================================================${NC}"

@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.5.0-alpha] - 2026-11-20
+
+### Added
+- **Crawler's Cookbook, Tutorial Guild Orientation & Progressive Bestiary (`modules/cookbook.php`)**:
+  - First-login **Tutorial Guild Orientation** briefing banner in the Safe Room Hub explaining the 18-Floor game loop and goals for brand-new Crawlers.
+  - In-game **Crawler's Reference Manual** with an Area-by-Area Hub Directory and complete Floor 1/3/6 Specialty, Race & Class reference.
+  - **Progressive Dungeon Bestiary** tracking every slain creature via `battle-victory` (1 kill = Identify, 3 kills = Weapon & Combat Stats, 5 kills = Full System AI Tactical Dossier & Mastery Star).
+
 ## [v0.4.3-alpha] - 2026-11-20
 
 ### Fixed
