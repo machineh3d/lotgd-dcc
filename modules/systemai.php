@@ -334,15 +334,21 @@ function systemai_render_admin_quicklinks(): void
     }
 
     $links = [];
-    if (!defined('SU_DOESNT_GIVE_GROTTO') || ($su & ~SU_DOESNT_GIVE_GROTTO)) {
+    // Always grant Grotto quick link for any superuser without SU_DOESNT_GIVE_GROTTO
+    $noGrottoFlag = defined('SU_DOESNT_GIVE_GROTTO') ? (int) SU_DOESNT_GIVE_GROTTO : 0;
+    if ($noGrottoFlag === 0 || ($su & ~$noGrottoFlag)) {
         addnav('', 'superuser.php');
         $links[] = '<a href="superuser.php">Grotto</a>';
     }
-    if (defined('SU_MANAGE_MODULES') && ($su & SU_MANAGE_MODULES)) {
+
+    // Modules quick link (check SU_MANAGE_MODULES if defined, otherwise allow superuser)
+    if (!defined('SU_MANAGE_MODULES') || ($su & (int) SU_MANAGE_MODULES)) {
         addnav('', 'modules.php');
         $links[] = '<a href="modules.php">Modules</a>';
     }
-    if (defined('SU_EDIT_USERS') && ($su & SU_EDIT_USERS)) {
+
+    // Users quick link (check SU_EDIT_USERS if defined, otherwise allow superuser)
+    if (!defined('SU_EDIT_USERS') || ($su & (int) SU_EDIT_USERS)) {
         addnav('', 'user.php');
         $links[] = '<a href="user.php">Users</a>';
     }

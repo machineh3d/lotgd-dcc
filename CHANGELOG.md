@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.3.9-alpha] - 2026-11-20
+
+### Fixed
+- **Syndicate Comms Link Always Visible (`themes/dcc_hud_minimal`, `themes/dcc_hud`)**: Scoped `.motd` hiding strictly to `.site-header .header-info .motd` so NB-Core's `<a class="motd">` Syndicate Comms link stays visible even with 0 unread messages.
+- **Admin Quick Links Compatibility (`modules/systemai.php`)**: Fixed `SU_MANAGE_MODULES` / `SU_EDIT_USERS` fallback checks so `Grotto | Modules | Users` quick links render reliably in `.site-header .header-info` for admins and module editors.
+
 ## [v0.3.8-alpha] - 2026-11-19
 
 ### Changed
