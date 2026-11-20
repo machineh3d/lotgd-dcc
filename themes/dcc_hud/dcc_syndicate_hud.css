@@ -1,0 +1,476 @@
+/**
+ * ============================================================================
+ * SYNDICATE BROADCAST HUD STYLESHEET (dcc_syndicate_hud.css)
+ * Target Engine: Legend of the Green Dragon (NB-Core v2.0.9+ / Twig & Legacy)
+ * Repository: https://github.com/machineh3d/lotgd-dcc
+ * Lore Reference: https://dungeon-crawler-carl.fandom.com/wiki/Dungeon_Crawler_Carl_Wiki
+ * ============================================================================
+ * INSTALLATION:
+ * 1. Copy into your active NB-Core template folder (e.g. `templates/dcc_hud/dcc_syndicate_hud.css`
+ *    or overwrite your active theme's `.css` file in `templates/aurora/` or `templates/neoyar/`).
+ * 2. Ensure `<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+ *    is present in your template's `<head>` block.
+ * ============================================================================
+ */
+
+:root {
+    --dcc-bg-void: #06090f;
+    --dcc-bg-panel: #0d1117;
+    --dcc-bg-elevated: #161b22;
+    --dcc-bg-row-alt: #121822;
+    --dcc-border-muted: #21262d;
+    --dcc-border-grid: #30363d;
+    --dcc-neon-cyan: #00f0ff;
+    --dcc-neon-crimson: #ff2a85;
+    --dcc-neon-red: #ff1e56;
+    --dcc-neon-gold: #ffd700;
+    --dcc-neon-green: #3fb950;
+    --dcc-text-primary: #e6edf3;
+    --dcc-text-secondary: #8b949e;
+    --dcc-font-mono: "JetBrains Mono", "Consolas", "Fira Code", "Courier New", monospace;
+    --dcc-font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --dcc-glow-cyan: 0 0 12px rgba(0, 240, 255, 0.32);
+    --dcc-glow-crimson: 0 0 14px rgba(255, 42, 133, 0.38);
+}
+
+/* ============================================================================
+ * 1. GLOBAL RESET & CRT TERMINAL ATMOSPHERE
+ * ============================================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    background-color: var(--dcc-bg-void);
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 85% 90%, rgba(255, 42, 133, 0.07) 0%, transparent 50%),
+        linear-gradient(rgba(13, 17, 23, 0.96), rgba(6, 9, 15, 0.99));
+    color: var(--dcc-text-primary);
+    font-family: var(--dcc-font-mono);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Subtle scanline overlay on main background */
+body::after {
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: fixed;
+    z-index: 9999;
+}
+
+/* ============================================================================
+ * 2. TYPOGRAPHY, LINKS & HEADINGS
+ * ============================================================================ */
+a {
+    color: var(--dcc-neon-cyan);
+    text-decoration: none;
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+a:hover,
+a:focus {
+    color: var(--dcc-neon-gold);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.55);
+}
+
+h1, h2, h3, h4, .pagetitle, .title {
+    color: var(--dcc-neon-cyan);
+    font-family: var(--dcc-font-mono);
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    margin: 0 0 10px 0;
+    text-shadow: var(--dcc-glow-cyan);
+    text-transform: uppercase;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--dcc-border-grid);
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+    margin: 12px 0;
+}
+
+/* ============================================================================
+ * 3. CORE LAYOUT CONTAINERS (TWIG FLEX/GRID & LEGACY TABLE FALLBACKS)
+ * ============================================================================ */
+.lotgd-wrapper,
+.page-container,
+#container {
+    margin: 0 auto;
+    max-width: 1440px;
+    padding: 10px;
+    width: 100%;
+}
+
+/* Top Header / Broadcast Banner */
+header,
+.pageheader,
+td.pageheader,
+#header {
+    background: linear-gradient(135deg, #090e17 0%, #160b1e 50%, #090e17 100%);
+    border: 1px solid var(--dcc-neon-cyan);
+    border-bottom: 3px solid var(--dcc-neon-crimson);
+    border-radius: 6px;
+    box-shadow: var(--dcc-glow-cyan);
+    margin-bottom: 10px;
+    padding: 10px 16px;
+}
+
+/* Main Content Stage */
+main,
+.content,
+td.content,
+#content {
+    background-color: var(--dcc-bg-panel);
+    border: 1px solid var(--dcc-border-grid);
+    border-top: 2px solid var(--dcc-neon-cyan);
+    border-radius: 6px;
+    box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.65);
+    padding: 16px 20px;
+    vertical-align: top;
+}
+
+/* ============================================================================
+ * 4. NAVIGATION SIDEBAR (SAFE ROOM & CORRIDOR COMMANDS)
+ * ============================================================================ */
+nav,
+.nav,
+td.nav,
+#nav {
+    background-color: var(--dcc-bg-panel);
+    border: 1px solid var(--dcc-border-grid);
+    border-left: 3px solid var(--dcc-neon-crimson);
+    border-radius: 6px;
+    padding: 10px;
+    vertical-align: top;
+    width: 240px;
+}
+
+/* Navigation Section Headers (e.g. "Safe Room Facilities") */
+.navhead,
+.nav-header,
+nav h3 {
+    background: linear-gradient(90deg, #240917 0%, #121824 100%);
+    border: 1px solid rgba(255, 42, 133, 0.45);
+    border-left: 4px solid var(--dcc-neon-crimson);
+    border-radius: 4px;
+    color: var(--dcc-neon-gold);
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 10px 0 4px 0;
+    padding: 5px 8px;
+    text-transform: uppercase;
+}
+
+.navhead:first-child {
+    margin-top: 0;
+}
+
+/* Clickable Navigation Links */
+a.nav,
+a.navhilite,
+nav a {
+    background-color: var(--dcc-bg-elevated);
+    border: 1px solid var(--dcc-border-muted);
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    color: var(--dcc-text-primary);
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    margin: 3px 0;
+    padding: 6px 10px;
+    transition: all 0.14s ease;
+}
+
+a.nav:hover,
+a.nav:focus,
+a.navhilite:hover,
+nav a:hover {
+    background-color: #1c2433;
+    border-color: rgba(0, 240, 255, 0.5);
+    border-left: 3px solid var(--dcc-neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.22);
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
+/* Hotkey Highlight Letter inside Nav Links */
+span.navhi,
+.navhi {
+    color: var(--dcc-neon-crimson);
+    font-weight: 900;
+    text-decoration: underline;
+}
+
+/* ============================================================================
+ * 5. CRAWLER TELEMETRY SIDEBAR (`charstats`)
+ * ============================================================================ */
+aside.charstats,
+td.charstats,
+.charstats,
+#charstats,
+#stats {
+    background-color: var(--dcc-bg-panel);
+    border: 1px solid var(--dcc-border-grid);
+    border-right: 3px solid var(--dcc-neon-cyan);
+    border-radius: 6px;
+    font-size: 0.86rem;
+    padding: 10px;
+    vertical-align: top;
+    width: 250px;
+}
+
+/* Stat Section Headers (e.g. "Personal Info", "Syndicate HUD") */
+.charhead,
+tr.charhead td,
+.stat-header {
+    background: linear-gradient(90deg, #0c2330 0%, #121824 100%);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-left: 4px solid var(--dcc-neon-cyan);
+    border-radius: 4px;
+    color: var(--dcc-neon-cyan);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 8px 0 4px 0;
+    padding: 4px 8px;
+    text-transform: uppercase;
+}
+
+.charinfo,
+table.charinfo {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.charinfo td {
+    border-bottom: 1px solid var(--dcc-border-muted);
+    padding: 3px 5px;
+}
+
+/* ============================================================================
+ * 6. TABLES, DATA GRIDS & LEADERBOARDS
+ * ============================================================================ */
+table {
+    border-collapse: collapse;
+}
+
+tr.trhead,
+thead tr,
+.trhead td,
+.trhead th {
+    background: linear-gradient(90deg, #162234 0%, #241126 100%);
+    border-bottom: 2px solid var(--dcc-neon-cyan);
+    color: var(--dcc-neon-cyan);
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    padding: 7px 10px;
+    text-transform: uppercase;
+}
+
+tr.trlight,
+.trlight td {
+    background-color: var(--dcc-bg-elevated);
+    border-bottom: 1px solid var(--dcc-border-muted);
+    padding: 6px 10px;
+}
+
+tr.trdark,
+.trdark td {
+    background-color: var(--dcc-bg-row-alt);
+    border-bottom: 1px solid var(--dcc-border-muted);
+    padding: 6px 10px;
+}
+
+tr.trlight:hover td,
+tr.trdark:hover td {
+    background-color: #1f293a;
+}
+
+/* ============================================================================
+ * 7. FORMS, INPUTS & TACTICAL HUD BUTTONS
+ * ============================================================================ */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input.input,
+select,
+textarea {
+    background-color: #080b10;
+    border: 1px solid var(--dcc-border-grid);
+    border-radius: 4px;
+    color: var(--dcc-text-primary);
+    font-family: var(--dcc-font-mono);
+    font-size: 0.92rem;
+    padding: 6px 10px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--dcc-neon-cyan);
+    box-shadow: var(--dcc-glow-cyan);
+    outline: none;
+}
+
+input[type="submit"],
+input[type="button"],
+button,
+.button {
+    background: linear-gradient(135deg, #142838 0%, #2b0c1e 100%);
+    border: 1px solid var(--dcc-neon-cyan);
+    border-radius: 4px;
+    color: var(--dcc-neon-cyan);
+    cursor: pointer;
+    font-family: var(--dcc-font-mono);
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    padding: 6px 14px;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+}
+
+input[type="submit"]:hover,
+button:hover,
+.button:hover {
+    background: linear-gradient(135deg, #00f0ff 0%, #ff2a85 100%);
+    border-color: #ffffff;
+    box-shadow: var(--dcc-glow-crimson);
+    color: #06090f;
+}
+
+/* ============================================================================
+ * 8. LOTGD BACKTICK COLOR PALETTE (HIGH-CONTRAST NEON TUNING)
+ * ============================================================================ */
+.colDkBlue    { color: #388bfd; }
+.colDkGreen   { color: #2ea043; }
+.colDkCyan    { color: #00b4d8; }
+.colDkRed     { color: #f85149; }
+.colDkMagenta { color: #d2a8ff; }
+.colDkYellow  { color: #d29922; }
+.colDkWhite   { color: #8b949e; }
+.colLtBlue    { color: #58a6ff; }
+.colLtGreen   { color: #3fb950; }
+.colLtCyan    { color: #00f0ff; }
+.colLtRed     { color: #ff2a85; font-weight: 600; }
+.colLtMagenta { color: #ff79c6; }
+.colLtYellow  { color: #ffd700; }
+.colLtWhite   { color: #ffffff; font-weight: 600; }
+.colDkOrange  { color: #f0883e; }
+.colLtOrange  { color: #ffa657; }
+
+/* ============================================================================
+ * 9. SYSTEM AI POPUP & SYNDICATE HUD MODULE WIDGETS
+ * ============================================================================ */
+@keyframes dccPulseBorder {
+    0%   { box-shadow: 0 0 12px rgba(255, 42, 133, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.12); }
+    50%  { box-shadow: 0 0 22px rgba(255, 42, 133, 0.75), inset 0 0 16px rgba(0, 240, 255, 0.25); }
+    100% { box-shadow: 0 0 12px rgba(255, 42, 133, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.12); }
+}
+
+.dcc-ai-popup {
+    animation: dccPulseBorder 2.6s infinite ease-in-out;
+}
+
+/* ============================================================================
+ * 10. MOBILE-RESPONSIVE BREAKPOINTS (PHONE & TABLET CRAWLER HUD)
+ * ============================================================================ */
+@media screen and (max-width: 960px) {
+    /* Stack legacy LotGD 3-column layout tables cleanly into vertical blocks */
+    table.page-table,
+    body > table,
+    #container > table {
+        display: block;
+        width: 100% !important;
+    }
+
+    td.nav,
+    td.content,
+    td.charstats,
+    nav,
+    main,
+    aside.charstats {
+        display: block;
+        margin-bottom: 10px;
+        width: 100% !important;
+    }
+
+    /* Turn navigation links into a 2-column touch-friendly button grid on mobile */
+    td.nav,
+    nav,
+    #nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .navhead,
+    .nav-header {
+        flex: 0 0 100%;
+        margin-top: 6px;
+    }
+
+    a.nav,
+    a.navhilite,
+    nav a {
+        align-items: center;
+        display: flex;
+        flex: 1 1 calc(50% - 6px);
+        font-size: 0.92rem;
+        min-height: 42px;
+        padding: 8px 10px;
+    }
+
+    /* Make data tables horizontally scrollable on narrow screens */
+    td.content table,
+    main table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    html,
+    body {
+        font-size: 14px;
+    }
+
+    main,
+    td.content,
+    #content {
+        padding: 12px;
+    }
+
+    /* Full-width tap targets on compact phone screens */
+    a.nav,
+    a.navhilite,
+    nav a {
+        flex: 1 1 100%;
+    }
+}

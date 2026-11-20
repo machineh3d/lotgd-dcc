@@ -1,0 +1,73 @@
+name: Validate & Publish DCC Release
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: PHP 8.4 Lint & Safety Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Lint all PHP modules
+        run: |
+          for f in modules/*.php migrations/*.php; do
+            echo "Checking $f..."
+            php -l "$f"
+          done
+
+      - name: Validate shell scripts
+        run: |
+          bash -n install.sh
+          if [ -f docker/apply-dcc-sql.sh ]; then
+            bash -n docker/apply-dcc-sql.sh
+          fi
+
+      - name: Check for stray double-percent specifiers in PHP output() calls
+        run: |
+          if grep -rnE "output\([^)]*%%" modules/; then
+            echo "ERROR: Found %% inside output() — NB-Core double-evaluates vsprintf(); spell out 'percent' instead."
+            exit 1
+          fi
+          echo "OK: No unsafe %% specifiers found."
+
+  release:
+    name: Package & Publish GitHub Release
+    needs: validate
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build versioned release ZIP
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          mkdir -p dist/lotgd-dcc-pack
+          cp -r VERSION CHANGELOG.md README.md install.sh Dockerfile docker-compose.yml .env.example .gitignore sql modules migrations themes docker .github dist/lotgd-dcc-pack/
+          cd dist
+          zip -r "lotgd-dcc-${TAG}.zip" lotgd-dcc-pack
+          ls -lh "lotgd-dcc-${TAG}.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/lotgd-dcc-*.zip
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') }}

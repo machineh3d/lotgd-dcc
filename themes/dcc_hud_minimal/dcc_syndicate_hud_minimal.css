@@ -1,0 +1,410 @@
+/**
+ * ============================================================================
+ * SYNDICATE BROADCAST HUD — NO-IMAGES / MINIMAL EDITION (dcc_syndicate_hud_minimal.css)
+ * Target Engine: Legend of the Green Dragon (NB-Core v2.0.9+ / Twig)
+ * Repository: https://github.com/machineh3d/lotgd-dcc
+ * Lore Reference: https://dungeon-crawler-carl.fandom.com/wiki/Dungeon_Crawler_Carl_Wiki
+ * ============================================================================
+ * DESIGN:
+ * - Identical neon cyan/crimson CRT terminal aesthetic as `dcc_syndicate_hud.css`.
+ * - Strips and hides all stock LotGD / Aurora fantasy banners, `login-hero.png`,
+ *   dragon logos, decorative images, and medieval background graphics.
+ * ============================================================================
+ */
+
+:root {
+    --dcc-bg-void: #06090f;
+    --dcc-bg-panel: #0d1117;
+    --dcc-bg-elevated: #161b22;
+    --dcc-bg-row-alt: #121822;
+    --dcc-border-muted: #21262d;
+    --dcc-border-grid: #30363d;
+    --dcc-neon-cyan: #00f0ff;
+    --dcc-neon-crimson: #ff2a85;
+    --dcc-neon-red: #ff1e56;
+    --dcc-neon-gold: #ffd700;
+    --dcc-neon-green: #3fb950;
+    --dcc-text-primary: #e6edf3;
+    --dcc-text-secondary: #8b949e;
+    --dcc-font-mono: "JetBrains Mono", "Consolas", "Fira Code", "Courier New", monospace;
+    --dcc-glow-cyan: 0 0 12px rgba(0, 240, 255, 0.32);
+    --dcc-glow-crimson: 0 0 14px rgba(255, 42, 133, 0.38);
+}
+
+/* ============================================================================
+ * 0. STRIP ALL STOCK LOTGD & AURORA IMAGES / LOGIN-HERO.PNG / BANNERS
+ * ============================================================================ */
+.login-hero,
+.login-hero-image,
+.login-banner,
+.hero-banner,
+[class*="login-hero"],
+img[src*="login-hero"],
+header img,
+.pageheader img,
+#header img,
+.logo img,
+.brand img,
+.header-banner,
+.banner-img,
+.lotgd-logo,
+img[src*="templates_twig/"],
+img[src*="templates/"],
+img[src*="images/logd"],
+img[src*="images/dragon"],
+img[src*="images/title"],
+img[src*="images/new.gif"],
+img[src*="images/old.gif"],
+img[src*="images/female.gif"],
+img[src*="images/male.gif"],
+img[src*="images/money.gif"],
+img[src*="images/gem.gif"] {
+    background: none !important;
+    background-image: none !important;
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 0 !important;
+}
+
+/* Remove any background artwork set by Aurora on headers, hero banners, or login boxes */
+header,
+.pageheader,
+#header,
+.header-bg,
+.banner,
+.hero,
+.login-box,
+.login-header,
+.login-wrapper,
+.login-container {
+    background-image: linear-gradient(135deg, #090e17 0%, #160b1e 50%, #090e17 100%) !important;
+}
+
+/* ============================================================================
+ * 1. GLOBAL RESET & CRT TERMINAL ATMOSPHERE (SAME AS DCC_HUD)
+ * ============================================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    background-color: var(--dcc-bg-void) !important;
+    background-image:
+        radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.08) 0%, transparent 55%),
+        radial-gradient(circle at 85% 90%, rgba(255, 42, 133, 0.07) 0%, transparent 50%),
+        linear-gradient(rgba(13, 17, 23, 0.96), rgba(6, 9, 15, 0.99)) !important;
+    color: var(--dcc-text-primary) !important;
+    font-family: var(--dcc-font-mono);
+    font-size: 15px;
+    line-height: 1.55;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 0;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Subtle CRT scanline overlay */
+body::after {
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.12) 0px,
+        rgba(0, 0, 0, 0.12) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    content: "";
+    inset: 0;
+    pointer-events: none;
+    position: fixed;
+    z-index: 9999;
+}
+
+/* ============================================================================
+ * 2. TYPOGRAPHY, LINKS & HEADINGS
+ * ============================================================================ */
+a {
+    color: var(--dcc-neon-cyan);
+    text-decoration: none;
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+a:hover,
+a:focus {
+    color: var(--dcc-neon-gold);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.55);
+}
+
+h1, h2, h3, h4, .pagetitle, .title {
+    color: var(--dcc-neon-cyan);
+    font-family: var(--dcc-font-mono);
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    margin: 0 0 10px 0;
+    text-shadow: var(--dcc-glow-cyan);
+    text-transform: uppercase;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--dcc-border-grid);
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.2);
+    margin: 12px 0;
+}
+
+/* ============================================================================
+ * 3. CORE LAYOUT CONTAINERS
+ * ============================================================================ */
+.lotgd-wrapper,
+.page-container,
+#container {
+    margin: 0 auto;
+    max-width: 1440px;
+    padding: 10px;
+    width: 100%;
+}
+
+header,
+.pageheader,
+td.pageheader,
+#header {
+    border: 1px solid var(--dcc-neon-cyan) !important;
+    border-bottom: 3px solid var(--dcc-neon-crimson) !important;
+    border-radius: 6px;
+    box-shadow: var(--dcc-glow-cyan);
+    margin-bottom: 10px;
+    padding: 10px 16px;
+}
+
+main,
+.content,
+td.content,
+#content {
+    background-color: var(--dcc-bg-panel) !important;
+    border: 1px solid var(--dcc-border-grid) !important;
+    border-top: 2px solid var(--dcc-neon-cyan) !important;
+    border-radius: 6px;
+    box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.65);
+    padding: 16px 20px;
+    vertical-align: top;
+}
+
+/* ============================================================================
+ * 4. NAVIGATION SIDEBAR
+ * ============================================================================ */
+nav,
+.nav,
+td.nav,
+#nav {
+    background-color: var(--dcc-bg-panel) !important;
+    border: 1px solid var(--dcc-border-grid) !important;
+    border-left: 3px solid var(--dcc-neon-crimson) !important;
+    border-radius: 6px;
+    padding: 10px;
+    vertical-align: top;
+}
+
+.navhead,
+.nav-header,
+nav h3 {
+    background: linear-gradient(90deg, #240917 0%, #121824 100%) !important;
+    border: 1px solid rgba(255, 42, 133, 0.45);
+    border-left: 4px solid var(--dcc-neon-crimson);
+    border-radius: 4px;
+    color: var(--dcc-neon-gold) !important;
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 10px 0 4px 0;
+    padding: 5px 8px;
+    text-transform: uppercase;
+}
+
+a.nav,
+a.navhilite,
+nav a {
+    background-color: var(--dcc-bg-elevated);
+    border: 1px solid var(--dcc-border-muted);
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    color: var(--dcc-text-primary);
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    margin: 3px 0;
+    padding: 6px 10px;
+    transition: all 0.14s ease;
+}
+
+a.nav:hover,
+a.nav:focus,
+a.navhilite:hover,
+nav a:hover {
+    background-color: #1c2433;
+    border-color: rgba(0, 240, 255, 0.5);
+    border-left: 3px solid var(--dcc-neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.22);
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
+span.navhi,
+.navhi {
+    color: var(--dcc-neon-crimson);
+    font-weight: 900;
+    text-decoration: underline;
+}
+
+/* ============================================================================
+ * 5. CRAWLER TELEMETRY SIDEBAR (`charstats`)
+ * ============================================================================ */
+aside.charstats,
+td.charstats,
+.charstats,
+#charstats,
+#stats {
+    background-color: var(--dcc-bg-panel) !important;
+    border: 1px solid var(--dcc-border-grid) !important;
+    border-right: 3px solid var(--dcc-neon-cyan) !important;
+    border-radius: 6px;
+    font-size: 0.86rem;
+    padding: 10px;
+    vertical-align: top;
+}
+
+.charhead,
+tr.charhead td,
+.stat-header {
+    background: linear-gradient(90deg, #0c2330 0%, #121824 100%) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    border-left: 4px solid var(--dcc-neon-cyan);
+    border-radius: 4px;
+    color: var(--dcc-neon-cyan) !important;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin: 8px 0 4px 0;
+    padding: 4px 8px;
+    text-transform: uppercase;
+}
+
+/* ============================================================================
+ * 6. TABLES, FORMS & BUTTONS
+ * ============================================================================ */
+table {
+    border-collapse: collapse;
+}
+
+tr.trhead,
+thead tr,
+.trhead td,
+.trhead th {
+    background: linear-gradient(90deg, #162234 0%, #241126 100%) !important;
+    border-bottom: 2px solid var(--dcc-neon-cyan);
+    color: var(--dcc-neon-cyan);
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    padding: 7px 10px;
+    text-transform: uppercase;
+}
+
+tr.trlight,
+.trlight td {
+    background-color: var(--dcc-bg-elevated);
+    border-bottom: 1px solid var(--dcc-border-muted);
+    padding: 6px 10px;
+}
+
+tr.trdark,
+.trdark td {
+    background-color: var(--dcc-bg-row-alt);
+    border-bottom: 1px solid var(--dcc-border-muted);
+    padding: 6px 10px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input.input,
+select,
+textarea {
+    background-color: #080b10;
+    border: 1px solid var(--dcc-border-grid);
+    border-radius: 4px;
+    color: var(--dcc-text-primary);
+    font-family: var(--dcc-font-mono);
+    font-size: 0.92rem;
+    padding: 6px 10px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--dcc-neon-cyan);
+    box-shadow: var(--dcc-glow-cyan);
+    outline: none;
+}
+
+input[type="submit"],
+input[type="button"],
+button,
+.button {
+    background: linear-gradient(135deg, #142838 0%, #2b0c1e 100%);
+    border: 1px solid var(--dcc-neon-cyan);
+    border-radius: 4px;
+    color: var(--dcc-neon-cyan);
+    cursor: pointer;
+    font-family: var(--dcc-font-mono);
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    padding: 6px 14px;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+}
+
+input[type="submit"]:hover,
+button:hover,
+.button:hover {
+    background: linear-gradient(135deg, #00f0ff 0%, #ff2a85 100%);
+    border-color: #ffffff;
+    box-shadow: var(--dcc-glow-crimson);
+    color: #06090f;
+}
+
+/* ============================================================================
+ * 7. LOTGD BACKTICK COLOR PALETTE
+ * ============================================================================ */
+.colDkBlue    { color: #388bfd; }
+.colDkGreen   { color: #2ea043; }
+.colDkCyan    { color: #00b4d8; }
+.colDkRed     { color: #f85149; }
+.colDkMagenta { color: #ff2a85; font-weight: 600; }
+.colDkYellow  { color: #d29922; }
+.colDkWhite   { color: #8b949e; }
+.colLtBlue    { color: #58a6ff; }
+.colLtGreen   { color: #3fb950; }
+.colLtCyan    { color: #00f0ff; }
+.colLtRed     { color: #ff2a85; font-weight: 600; }
+.colLtMagenta { color: #ff79c6; }
+.colLtYellow  { color: #ffd700; }
+.colLtWhite   { color: #ffffff; font-weight: 600; }
+.colDkOrange  { color: #f0883e; }
+.colLtOrange  { color: #ffa657; }
+
+@keyframes dccPulseBorder {
+    0%   { box-shadow: 0 0 12px rgba(255, 42, 133, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.12); }
+    50%  { box-shadow: 0 0 22px rgba(255, 42, 133, 0.75), inset 0 0 16px rgba(0, 240, 255, 0.25); }
+    100% { box-shadow: 0 0 12px rgba(255, 42, 133, 0.4), inset 0 0 8px rgba(0, 240, 255, 0.12); }
+}
+
+.dcc-ai-popup {
+    animation: dccPulseBorder 2.6s infinite ease-in-out;
+}

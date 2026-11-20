@@ -1,0 +1,55 @@
+# ============================================================================
+# DUNGEON CRAWLER CARL — PRE-BAKED DOCKER COMPOSE STACK
+# Copy .env.example to .env and replace all YOUR_* placeholders before running:
+#   docker compose up -d --build
+# ============================================================================
+services:
+  dcc-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ${LOTGD_BASE_IMAGE:-ghcr.io/nb-core/lotgd:latest}
+    container_name: ${WEB_CONTAINER_NAME:-dcc-web}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    depends_on:
+      dcc-db:
+        condition: service_healthy
+    environment:
+      TZ: ${TZ:-UTC}
+    volumes:
+      - dcc_cache:/var/www/html/cache
+      - dcc_config:/var/www/html/config
+    networks:
+      - dcc-net
+
+  dcc-db:
+    image: mariadb:11
+    container_name: ${DB_CONTAINER_NAME:-dcc-db}
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:?Set DB_NAME in .env}
+      MARIADB_USER: ${DB_USER:?Set DB_USER in .env}
+      MARIADB_PASSWORD: ${DB_PASS:?Set DB_PASS in .env}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASS:?Set DB_ROOT_PASS in .env}
+    volumes:
+      - dcc_db_data:/var/lib/mysql
+      - ./sql:/opt/lotgd-dcc/sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dcc-net
+
+volumes:
+  dcc_db_data:
+  dcc_cache:
+  dcc_config:
+
+networks:
+  dcc-net:
+    driver: bridge

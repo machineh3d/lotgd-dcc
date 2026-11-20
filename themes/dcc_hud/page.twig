@@ -1,0 +1,193 @@
+{#
+ # ============================================================================
+ # SYNDICATE BROADCAST HUD — MAIN TWIG TEMPLATE (index.twig)
+ # Target Engine: Legend of the Green Dragon (NB-Core v2.0.9+ Edition)
+ # Repository: https://github.com/machineh3d/lotgd-dcc
+ # Companion Stylesheet: dcc_syndicate_hud.css
+ # ============================================================================
+ # INSTALLATION:
+ # 1. Create directory: `templates/dcc_hud/`
+ # 2. Place `index.twig` and `dcc_syndicate_hud.css` inside `templates/dcc_hud/`
+ #    (Optional: copy `index.twig` to `popup.twig` in the same folder so popup
+ #    windows like Crawler Mail and MOTD automatically render in compact mode).
+ # 3. Select `dcc_hud` in Superuser Grotto -> Game Settings -> Default Skin.
+ # ============================================================================
+ #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DUNGEON CRAWLER WORLD // {{ title|striptags|default('Syndicate Broadcast HUD') }}</title>
+
+    {# Load the Syndicate Broadcast HUD Stylesheet #}
+    <link rel="stylesheet" type="text/css" href="{{ template_path|default('templates/dcc_hud') }}/dcc_syndicate_hud.css">
+
+    <style>
+        /* Structural Grid Layout pairing with dcc_syndicate_hud.css */
+        .dcc-hud-grid {
+            display: grid;
+            grid-template-columns: 240px minmax(0, 1fr) 250px;
+            gap: 12px;
+            align-items: start;
+        }
+        .dcc-hud-grid.dcc-popup-mode {
+            grid-template-columns: minmax(0, 1fr);
+        }
+        .dcc-topbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .dcc-Brand-block {
+            display: flex;
+            flex-direction: column;
+        }
+        .dcc-brand-tag {
+            font-size: 0.72rem;
+            color: var(--dcc-neon-crimson, #ff2a85);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        .dcc-comms-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        .dcc-comms-pill {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-bottom: 2px solid var(--dcc-neon-cyan, #00f0ff);
+            border-radius: 4px;
+            padding: 4px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dcc-comms-pill:hover {
+            border-color: var(--dcc-neon-crimson, #ff2a85);
+            box-shadow: 0 0 8px rgba(255, 42, 133, 0.35);
+        }
+        .dcc-footer {
+            margin-top: 12px;
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-top: 2px solid var(--dcc-neon-crimson, #ff2a85);
+            border-radius: 6px;
+            padding: 10px 16px;
+            font-size: 0.78rem;
+            color: #8b949e;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        @media screen and (max-width: 960px) {
+            .dcc-hud-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            /* Order on mobile: 1. Main Content, 2. Navigation Buttons, 3. Character Stats */
+            .dcc-hud-grid > main#content  { order: 1; }
+            .dcc-hud-grid > nav#nav       { order: 2; }
+            .dcc-hud-grid > aside#stats   { order: 3; }
+        }
+    </style>
+
+    {# NB-Core Engine Head Scripts & Jaxon Async Hooks #}
+    {{ headscript|raw }}
+    {{ script|raw }}
+</head>
+<body>
+    {% set is_compact_popup = (is_popup|default(false)) or (nav is not defined or nav is empty) %}
+
+    <div id="container" class="lotgd-wrapper page-container">
+        {# ====================================================================
+         # 1. SYNDICATE BROADCAST HUD HEADER & COMMS BAR
+         # ==================================================================== #}
+        <header id="header" class="pageheader">
+            <div class="dcc-topbar">
+                <div class="dcc-brand-block">
+                    <span class="dcc-brand-tag">&#9679; LIVE SYNDICATE FEED // BORANT CORPORATION</span>
+                    <h1 class="pagetitle" style="margin:2px 0 0 0;font-size:1.35rem;">
+                        {{ title|raw }}
+                    </h1>
+                </div>
+
+                {% if not is_compact_popup %}
+                <div class="dcc-comms-bar" aria-label="Crawler Communications">
+                    {% if motd is defined and motd is not empty %}
+                        <span class="dcc-comms-pill">&#128225; {{ motd|raw }}</span>
+                    {% endif %}
+                    {% if mail is defined and mail is not empty %}
+                        <span class="dcc-comms-pill">&#128172; {{ mail|raw }}</span>
+                    {% endif %}
+                    {% if petition is defined and petition is not empty %}
+                        <span class="dcc-comms-pill">&#9888;&#65039; {{ petition|raw }}</span>
+                    {% endif %}
+                    {% if petitiondisplay is defined and petitiondisplay is not empty %}
+                        <span class="dcc-comms-pill" style="border-color:#ff2a85;">
+                            {{ petitiondisplay|raw }}
+                        </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </header>
+
+        {# ====================================================================
+         # 2. THREE-COLUMN CRAWLER HUD WORKSPACE (NAV / STAGE / TELEMETRY)
+         # ==================================================================== #}
+        <div class="dcc-hud-grid{% if is_compact_popup %} dcc-popup-mode{% endif %}">
+            {% if not is_compact_popup %}
+            {# Left Column: Safe Room & Corridor Navigation #}
+            <nav id="nav" class="nav" aria-label="Dungeon Navigation">
+                {{ nav|raw }}
+            </nav>
+            {% endif %}
+
+            {# Center Column: Main Game Output & System AI Alerts #}
+            <main id="content" class="content" role="main">
+                {{ body|raw }}
+            </main>
+
+            {% if not is_compact_popup and stats is defined and stats is not empty %}
+            {# Right Column: Crawler Biometrics & Syndicate HUD (`charstats`) #}
+            <aside id="stats" class="charstats" aria-label="Crawler Telemetry">
+                {{ stats|raw }}
+            </aside>
+            {% endif %}
+        </div>
+
+        {# ====================================================================
+         # 3. SYNDICATE COMPLIANCE & ENGINE TELEMETRY FOOTER
+         # ==================================================================== #}
+        <footer class="dcc-footer">
+            <div>
+                <div>{{ copyright|raw }}</div>
+                <div style="color:#6e7681;margin-top:2px;">
+                    Engine: <strong style="color:#00f0ff;">{{ version|default('NB-Core v2.0.9+')|raw }}</strong>
+                    {% if source is defined and source is not empty %}
+                        &bull; {{ source|raw }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="text-align:right;">
+                {% if paypal is defined and paypal is not empty %}
+                    <div style="margin-bottom:4px;">{{ paypal|raw }}</div>
+                {% endif %}
+                {% if pagegen is defined and pagegen is not empty %}
+                    <div style="color:#8b949e;">{{ pagegen|raw }}</div>
+                {% endif %}
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
