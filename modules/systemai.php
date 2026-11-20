@@ -60,6 +60,8 @@ function systemai_install(): bool
     module_addhook('weaponstext');
     module_addhook('armortext');
     module_addhook('stabletext');
+    module_addhook('everyheader');
+    module_addhook('motd-link');
     module_addhook('charstats');
     module_addhook('everyhit-loggedin');
     module_addhook('bioinfo');
@@ -324,45 +326,43 @@ function systemai_render_pending_popups(): void
  * Renders top-banner Quick Links (Grotto, Modules, Users) for Admin & Module Editors,
  * registering allowed navs via addnav() so clicking never triggers badnav.php.
  */
-function systemai_render_admin_quicklinks(): void
+function systemai_get_admin_quicklinks_html(bool $registerNavs = false): string
 {
     global $session;
 
     $su = (int) ($session['user']['superuser'] ?? 0);
     if ($su <= 0) {
-        return;
+        return '';
     }
 
     $links = [];
-    // Always grant Grotto quick link for any superuser without SU_DOESNT_GIVE_GROTTO
     $noGrottoFlag = defined('SU_DOESNT_GIVE_GROTTO') ? (int) SU_DOESNT_GIVE_GROTTO : 0;
     if ($noGrottoFlag === 0 || ($su & ~$noGrottoFlag)) {
-        addnav('', 'superuser.php');
+        if ($registerNavs) {
+            addnav('', 'superuser.php');
+        }
         $links[] = '<a href="superuser.php">Grotto</a>';
     }
 
-    // Modules quick link (check SU_MANAGE_MODULES if defined, otherwise allow superuser)
     if (!defined('SU_MANAGE_MODULES') || ($su & (int) SU_MANAGE_MODULES)) {
-        addnav('', 'modules.php');
+        if ($registerNavs) {
+            addnav('', 'modules.php');
+        }
         $links[] = '<a href="modules.php">Modules</a>';
     }
 
-    // Users quick link (check SU_EDIT_USERS if defined, otherwise allow superuser)
     if (!defined('SU_EDIT_USERS') || ($su & (int) SU_EDIT_USERS)) {
-        addnav('', 'user.php');
+        if ($registerNavs) {
+            addnav('', 'user.php');
+        }
         $links[] = '<a href="user.php">Users</a>';
     }
 
     if ($links === []) {
-        return;
+        return '';
     }
 
-    $html = '<div class="dcc-admin-quicklinks">' . implode('', $links) . '</div>';
-    $jsonHtml = json_encode($html, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-
-    rawoutput(
-        "<script>(function(){var h=" . $jsonHtml . ";function m(){var el=document.querySelector('.site-header .header-info');if(el && !el.querySelector('.dcc-admin-quicklinks')){el.insertAdjacentHTML('beforeend',h);}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',m);}else{m();}})();</script>"
-    );
+    return '<div class="dcc-admin-quicklinks">' . implode('', $links) . '</div>';
 }
 
 function systemai_dohook(string $hookname, array $args): array
@@ -422,12 +422,19 @@ function systemai_dohook(string $hookname, array $args): array
             $args['newmount'] = '`7You wire the credits and break open an Enhanced Pet Biscuit—`&%s`7 bounds out of the kennel and bonds to your party!`n`n';
             break;
 
+        case 'everyheader':
+            systemai_get_admin_quicklinks_html(true);
+            break;
+
+        case 'motd-link':
+            $args['link'] = systemai_get_admin_quicklinks_html(false);
+            break;
+
         case 'everyhit-loggedin':
             if ((int) ($session['user']['gold'] ?? 0) >= 25000) {
                 systemai_unlock_achievement('wealth_hoarder');
             }
             systemai_render_pending_popups();
-            systemai_render_admin_quicklinks();
             break;
 
         case 'newday':

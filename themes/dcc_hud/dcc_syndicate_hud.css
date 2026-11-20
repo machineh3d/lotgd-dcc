@@ -486,7 +486,6 @@ button:hover,
     gap: 12px !important;
     margin: 0 !important;
 }
-.site-header .header-info .motd,
 .site-header .header-info .petition,
 .site-header .mail-nav .mail-nav__link:nth-child(2) {
     display: none !important;

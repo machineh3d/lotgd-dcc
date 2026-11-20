@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.10-alpha] - 2026-11-20
+
+### Fixed
+- **Native Top-Banner Admin Quick Links (`modules/systemai.php`, `themes/`)**: Switched from JS DOM injection to NB-Core's native `everyheader` + `motd-link` hooks—replacing MoTD with `Grotto | Modules | Users` pills for admins/module editors and hiding MoTD cleanly for regular Crawlers.
+
 ## [v0.3.9-alpha] - 2026-11-20
 
 ### Fixed
