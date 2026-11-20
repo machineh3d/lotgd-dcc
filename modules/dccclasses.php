@@ -51,6 +51,8 @@ function dccclasses_getmoduleinfo(): array
 
 function dccclasses_install(): bool
 {
+    module_addhook('chooserace');
+    module_addhook('setrace');
     module_addhook('village');
     module_addhook('newday');
     module_addhook('fightnav-specialties');
@@ -490,6 +492,18 @@ function dccclasses_dohook(string $hookname, array $args): array
                 addnav('`^Floor 3 Race & Class Selection (!)`0', 'runmodule.php?module=dccclasses');
             } else {
                 addnav('Crawler Race & Class Desk', 'runmodule.php?module=dccclasses');
+            }
+            break;
+
+        case 'chooserace':
+            output("`#`b[COLLAPSE SURVIVOR REGISTRATION]:`b `7All surface survivors enter Floor 1 of the World Dungeon as baseline `^Earth Humans`7. Survive to Floor 3 to unlock full Syndicate Race & Class selection (Primal, Changeling, Sapient Persian Cat, Highland Caprid, Armored Crocodilian)!`0`n`n");
+            $resline = (string) ($args['resline'] ?? '');
+            addnav('`^Earth Human (Surface Survivor)`0', 'newday.php?setrace=Earth+Human' . $resline);
+            break;
+
+        case 'setrace':
+            if (($session['user']['race'] ?? '') === 'Earth Human') {
+                output("`@[SYSTEM AI]:`0 `2Biometric scan complete. Registered as `^Earth Human`2 (Floor 1 Surface Survivor). Try not to die in the first hallway!`0`n");
             }
             break;
 

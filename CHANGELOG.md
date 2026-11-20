@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.4.1-alpha] - 2026-11-20
+
+### Fixed
+- **New Crawler Starting Race (`modules/dccclasses.php`)**: Added `chooserace` and `setrace` hooks so brand-new accounts register cleanly as `Earth Human (Surface Survivor)` on Floor 1 instead of seeing "No races installed" after stock medieval races are stripped.
+
 ## [v0.4.0-alpha] - 2026-11-20
 
 ### Added
