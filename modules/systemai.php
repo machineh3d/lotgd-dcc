@@ -163,6 +163,133 @@ function systemai_get_achievement_catalog(): array
             'reward_text' => 'You have received a Gold Capitalist Box!',
             'boxes' => ['gold' => 1],
         ],
+        'loot_goblin_25' => [
+            'title' => 'Certified Box Ripper!',
+            'desc' => 'You have cracked open 25 Syndicate Loot Boxes! Your fingers are permanently stained with Borant glitter.',
+            'reward_text' => 'You have received a Silver Loot Box!',
+            'boxes' => ['silver' => 1],
+            'hidden' => false,
+        ],
+        'sponsor_darling' => [
+            'title' => 'Prime-Time Tunnel Darling!',
+            'desc' => '50+ Viewer Ratings! Princess Donut is furious that your merch is outselling hers in three outer-rim systems.',
+            'reward_text' => 'You have received a Gold Fan Box!',
+            'boxes' => ['gold' => 1],
+            'hidden' => false,
+        ],
+        'stairwell_9' => [
+            'title' => 'Welcome to Faction Wars!',
+            'desc' => 'Nine Floors down! Nine alien armies are waiting outside Larracos, and this season the safety protocols are OFF.',
+            'reward_text' => 'You have received a Celestial War Box!',
+            'boxes' => ['celestial' => 1],
+            'hidden' => false,
+        ],
+        'stairwell_12' => [
+            'title' => 'Challenger of the Celestial Ascendency!',
+            'desc' => 'Twelve Floors deep! The gods are no longer invulnerable, and Emberus is already glaring at you from his throne.',
+            'reward_text' => 'You have received two Celestial Loot Boxes!',
+            'boxes' => ['celestial' => 2],
+            'hidden' => false,
+        ],
+        // === HIDDEN / CLASSIFIED SYSTEM AI ACHIEVEMENTS (14) ===
+        'one_hp_miracle' => [
+            'title' => 'Hanging by a Fingernail!',
+            'desc' => 'You are walking around the World Dungeon with literally ONE Hitpoint left! A stiff breeze or an aggressive sneeze would vaporize you right now!',
+            'reward_text' => 'You have received a Silver Survivor Box!',
+            'boxes' => ['silver' => 1],
+            'hidden' => true,
+        ],
+        'zero_gold_broke' => [
+            'title' => 'Penniless & Pathetic!',
+            'desc' => 'Zero Gold Credits in your pockets AND zero in Orren''s vault! Even the goblin beggars are tossing spare change at you out of pity.',
+            'reward_text' => 'You have received a Bronze Welfare Box!',
+            'boxes' => ['bronze' => 1],
+            'hidden' => true,
+        ],
+        'gem_hoarder_50' => [
+            'title' => 'Sponsor Token Dragon!',
+            'desc' => '50+ Sponsor Tokens hoarded in your pouch! Are you planning to buy a planet or just sleep on a pile of glowing syndicate vouchers?',
+            'reward_text' => 'You have received a Gold Sponsor Box!',
+            'boxes' => ['gold' => 1],
+            'hidden' => true,
+        ],
+        'flawless_streak_10' => [
+            'title' => 'Stop Showing Off, Carl!',
+            'desc' => '10 Flawless combat victories without taking a scratch! The Syndicate showrunners are actively buffing the next floor just to wipe that smirk off your face.',
+            'reward_text' => 'You have received a Gold Tactician Box!',
+            'boxes' => ['gold' => 1],
+            'hidden' => true,
+        ],
+        'death_ten_times' => [
+            'title' => 'Borant''s Favorite Punching Bag!',
+            'desc' => 'Ten televised deaths! The Reconstruction Bay technicians named a cryo-tube after you and installed a punch-card machine by the door.',
+            'reward_text' => 'You have received a Gold Pity Box!',
+            'boxes' => ['gold' => 1],
+            'hidden' => true,
+        ],
+        'box_addict_50' => [
+            'title' => 'Dopamine Junkie!',
+            'desc' => '50 Loot Boxes cracked open! The System AI has officially flagged your brain chemistry as 94 percent confetti and pure gambling addiction.',
+            'reward_text' => 'You have received a Celestial Mystery Box!',
+            'boxes' => ['celestial' => 1],
+            'hidden' => true,
+        ],
+        'club_vanquisher_banned' => [
+            'title' => 'Persona Non Grata!',
+            'desc' => 'You got yourself permanently banned from Club Vanquisher on live television! Carl and Prepotente both send their warmest regards.',
+            'reward_text' => 'You have received a Silver Scandal Box!',
+            'boxes' => ['silver' => 1],
+            'hidden' => true,
+        ],
+        'bopca_menace' => [
+            'title' => 'Do NOT Touch the Bopca!',
+            'desc' => 'You actually tried to start a fight inside a Bopca-protected Safe Room! Did you skip the entire Tutorial Guild briefing?!',
+            'reward_text' => 'You have received a Bronze Contempt Box!',
+            'boxes' => ['bronze' => 1],
+            'hidden' => true,
+        ],
+        'boss_hunter_5' => [
+            'title' => 'Certified Boss Crusher!',
+            'desc' => 'Five Dungeon Boss Kill Stars pinned to your HUD! The Neighborhood and Borough Bosses have formed a support group because of you.',
+            'reward_text' => 'You have received a Gold Boss-Slayer Box!',
+            'boxes' => ['gold' => 1],
+            'hidden' => true,
+        ],
+        'quest_grinder_10' => [
+            'title' => 'Mordecai''s Teacher''s Pet!',
+            'desc' => 'Ten Bopca Safe Room Floor Quests completed! You actually read the quest board instead of just blowing up hallways like a normal anarchist.',
+            'reward_text' => 'You have received a Silver Quest-Master Box!',
+            'boxes' => ['silver' => 1],
+            'hidden' => true,
+        ],
+        'faction_warlord' => [
+            'title' => 'Ninth Floor War Criminal!',
+            'desc' => '100+ Faction Wars War Points racked up around Larracos! Several Syndicate senators are drafting an emergency sanctions bill with your name on it.',
+            'reward_text' => 'You have received a Celestial Warlord Box!',
+            'boxes' => ['celestial' => 1],
+            'hidden' => true,
+        ],
+        'triple_sponsored' => [
+            'title' => 'Corporate Sellout Supreme!',
+            'desc' => 'All three Syndicate Sponsor slots filled at once! Your armor has more corporate logos on it than an Earth stock car.',
+            'reward_text' => 'You have received a Gold Endorsement Box!',
+            'boxes' => ['gold' => 1],
+            'hidden' => true,
+        ],
+        'high_roller_100k' => [
+            'title' => 'Syndicate Oligarch!',
+            'desc' => '100,000+ Gold Credits in your pockets! At this point the Borant Corporation is considering selling you a seat on the board.',
+            'reward_text' => 'You have received a Celestial Oligarch Box!',
+            'boxes' => ['celestial' => 1],
+            'hidden' => true,
+        ],
+        'midnight_crawler' => [
+            'title' => 'Insomniac Night-Shift Crawler!',
+            'desc' => 'Crawling through the Dungeon between midnight and 4 AM! Go to sleep, Crawler—the aliens in the outer rim appreciate your dedication, though.',
+            'reward_text' => 'You have received a Silver Night-Owl Box!',
+            'boxes' => ['silver' => 1],
+            'hidden' => true,
+        ],
     ];
 }
 
@@ -232,6 +359,7 @@ function systemai_unlock_achievement(string $achId): bool
         'title' => $ach['title'],
         'desc' => $ach['desc'],
         'reward' => $ach['reward_text'],
+        'hidden' => !empty($ach['hidden']),
     ];
     systemai_set_json_pref('pending_popups', $pending);
 
@@ -311,7 +439,8 @@ function systemai_render_pending_popups(): void
         $reward = htmlspecialchars((string) ($popup['reward'] ?? ''), ENT_QUOTES, 'UTF-8');
 
         rawoutput('<div class="dcc-ai-popup">');
-        rawoutput('<div class="dcc-ai-popup-header">&#9888; NEW ACHIEVEMENT!</div>');
+        $hdr = !empty($popup['hidden']) ? '&#9733; SECRET ACHIEVEMENT UNLOCKED!' : '&#9888; NEW ACHIEVEMENT!';
+        rawoutput('<div class="dcc-ai-popup-header">' . $hdr . '</div>');
         rawoutput('<div class="dcc-ai-popup-title">' . $title . '</div>');
         rawoutput('<div class="dcc-ai-popup-desc">"' . $desc . '"</div>');
         rawoutput('<div class="dcc-ai-popup-reward">&#127873; REWARD: ' . $reward . ' (Open in Safe Room)</div>');
@@ -378,8 +507,67 @@ function systemai_dohook(string $hookname, array $args): array
             break;
 
         case 'everyhit-loggedin':
-            if ((int) ($session['user']['gold'] ?? 0) >= 25000) {
+            $goldNow = (int) ($session['user']['gold'] ?? 0);
+            $bankNow = (int) ($session['user']['goldinbank'] ?? 0);
+            $gemsNow = (int) ($session['user']['gems'] ?? 0);
+            $hpNow = (int) ($session['user']['hitpoints'] ?? 0);
+            $lvlNow = (int) ($session['user']['level'] ?? 1);
+            $charmNow = (int) ($session['user']['charm'] ?? 0);
+
+            if ($goldNow >= 25000) {
                 systemai_unlock_achievement('wealth_hoarder');
+            }
+            if ($goldNow >= 100000) {
+                systemai_unlock_achievement('high_roller_100k');
+            }
+            if ($lvlNow >= 2 && $goldNow === 0 && $bankNow === 0) {
+                systemai_unlock_achievement('zero_gold_broke');
+            }
+            if ($gemsNow >= 50) {
+                systemai_unlock_achievement('gem_hoarder_50');
+            }
+            if ($charmNow >= 50) {
+                systemai_unlock_achievement('sponsor_darling');
+            }
+            if ((bool) ($session['user']['alive'] ?? false) && $hpNow === 1) {
+                systemai_unlock_achievement('one_hp_miracle');
+            }
+            $hourNow = (int) date('G');
+            if ($hourNow >= 0 && $hourNow < 4) {
+                systemai_unlock_achievement('midnight_crawler');
+            }
+
+            // Cross-module hidden achievement telemetry checks
+            if (is_module_active('clubvanquisher') && (bool) get_module_pref('vanquisher_banned', 'clubvanquisher')) {
+                systemai_unlock_achievement('club_vanquisher_banned');
+            }
+            if (is_module_active('bopcaprotector')) {
+                if ((int) get_module_pref('bopca_strikes', 'bopcaprotector') > 0) {
+                    systemai_unlock_achievement('bopca_menace');
+                }
+                if ((int) get_module_pref('lifetime_quests', 'bopcaprotector') >= 10) {
+                    systemai_unlock_achievement('quest_grinder_10');
+                }
+            }
+            if (is_module_active('dungeonbosses')) {
+                $totalStars = (int) get_module_pref('stars_neighborhood', 'dungeonbosses')
+                    + (int) get_module_pref('stars_borough', 'dungeonbosses')
+                    + (int) get_module_pref('stars_city', 'dungeonbosses')
+                    + (int) get_module_pref('stars_province', 'dungeonbosses');
+                if ($totalStars >= 5) {
+                    systemai_unlock_achievement('boss_hunter_5');
+                }
+            }
+            if (is_module_active('factionwars') && (int) get_module_pref('lifetime_war_points', 'factionwars') >= 100) {
+                systemai_unlock_achievement('faction_warlord');
+            }
+            if (is_module_active('sponsors')) {
+                $s1 = (string) get_module_pref('patron_slot_1', 'sponsors');
+                $s2 = (string) get_module_pref('patron_slot_2', 'sponsors');
+                $s3 = (string) get_module_pref('patron_slot_3', 'sponsors');
+                if ($s1 !== '' && $s2 !== '' && $s3 !== '') {
+                    systemai_unlock_achievement('triple_sponsored');
+                }
             }
             systemai_render_pending_popups();
             break;
@@ -396,6 +584,12 @@ function systemai_dohook(string $hookname, array $args): array
             }
             if ($dks >= 6) {
                 systemai_unlock_achievement('stairwell_6');
+            }
+            if ($dks >= 9) {
+                systemai_unlock_achievement('stairwell_9');
+            }
+            if ($dks >= 12) {
+                systemai_unlock_achievement('stairwell_12');
             }
             systemai_render_pending_popups();
             break;
@@ -422,6 +616,9 @@ function systemai_dohook(string $hookname, array $args): array
             if ($hp >= $maxHp) {
                 $flawless = (int) get_module_pref('flawless_kills', 'systemai') + 1;
                 set_module_pref('flawless_kills', $flawless, 'systemai');
+            if ($flawless >= 10) {
+                systemai_unlock_achievement('flawless_streak_10');
+            }
                 systemai_unlock_achievement('flawless_victory');
             }
 
@@ -462,6 +659,9 @@ function systemai_dohook(string $hookname, array $args): array
             systemai_unlock_achievement('first_death');
             if ($deaths >= 5) {
                 systemai_unlock_achievement('repeat_customer');
+            }
+            if ($deaths >= 10) {
+                systemai_unlock_achievement('death_ten_times');
             }
             systemai_render_pending_popups();
             break;
@@ -568,6 +768,12 @@ function systemai_open_single_box(string $tier): void
     set_module_pref($prefKey, $count - 1, 'systemai');
     $opened = (int) get_module_pref('total_boxes_opened', 'systemai') + 1;
     set_module_pref('total_boxes_opened', $opened, 'systemai');
+    if ($opened >= 25) {
+        systemai_unlock_achievement('loot_goblin_25');
+    }
+    if ($opened >= 50) {
+        systemai_unlock_achievement('box_addict_50');
+    }
 
     $level = max(1, (int) ($session['user']['level'] ?? 1));
 
@@ -758,10 +964,23 @@ function systemai_run(): void
         $catalog = systemai_get_achievement_catalog();
         $unlocked = systemai_get_json_pref('unlocked_achievements');
 
+        $hiddenTotal = 0;
+        $hiddenFound = 0;
+        foreach ($catalog as $id => $info) {
+            if (!empty($info['hidden'])) {
+                $hiddenTotal++;
+                if (isset($unlocked[$id])) {
+                    $hiddenFound++;
+                }
+            }
+        }
+
         output(
-            "`3The holographic terminal projects your Syndicate Crawler dossier (`^%d / %d Achievements Unlocked`3):`0`n`n",
+            "`3The holographic terminal projects your Syndicate Crawler dossier (`^%d / %d Achievements Unlocked`3 | `5%d / %d Secret Achievements Discovered`3):`0`n`n",
             count($unlocked),
-            count($catalog)
+            count($catalog),
+            $hiddenFound,
+            $hiddenTotal
         );
 
         rawoutput('<table border="0" cellpadding="6" cellspacing="1" width="100%" style="background:#11161d;border:1px solid #30363d;">');
@@ -769,17 +988,32 @@ function systemai_run(): void
 
         foreach ($catalog as $id => $info) {
             $isUnlocked = isset($unlocked[$id]);
-            $statusBadge = $isUnlocked
-                ? '<span style="color:#2ea043;font-weight:bold;">&#10004; UNLOCKED</span><br><small style="color:#8b949e;">' . htmlspecialchars((string) $unlocked[$id], ENT_QUOTES, 'UTF-8') . '</small>'
-                : '<span style="color:#6e7681;">&#128274; LOCKED</span>';
-            $rowBg = $isUnlocked ? '#161b22' : '#0d1117';
-            $titleColor = $isUnlocked ? '#ffd700' : '#8b949e';
+            $isHidden = !empty($info['hidden']);
+
+            if ($isHidden && !$isUnlocked) {
+                $statusBadge = '<span style="color:#ff2a85;font-weight:bold;">&#128274; SECRET</span>';
+                $rowBg = '#0b0e14';
+                $titleHtml = '<span style="color:#8b949e;letter-spacing:1px;">??? [CLASSIFIED ACHIEVEMENT]</span>';
+                $descHtml = '<span style="color:#6e7681;">Unlock condition redacted by the System AI. Keep doing reckless things in the Dungeon to discover it.</span>';
+                $rewardHtml = '<span style="color:#6e7681;">??? [REDACTED]</span>';
+            } else {
+                $statusBadge = $isUnlocked
+                    ? ($isHidden
+                        ? '<span style="color:#ff2a85;font-weight:bold;">&#9733; SECRET UNLOCKED</span><br><small style="color:#8b949e;">' . htmlspecialchars((string) $unlocked[$id], ENT_QUOTES, 'UTF-8') . '</small>'
+                        : '<span style="color:#2ea043;font-weight:bold;">&#10004; UNLOCKED</span><br><small style="color:#8b949e;">' . htmlspecialchars((string) $unlocked[$id], ENT_QUOTES, 'UTF-8') . '</small>')
+                    : '<span style="color:#6e7681;">&#128274; LOCKED</span>';
+                $rowBg = $isUnlocked ? '#161b22' : '#0d1117';
+                $titleColor = $isUnlocked ? '#ffd700' : '#8b949e';
+                $titleHtml = '<span style="color:' . $titleColor . ';font-weight:bold;">' . htmlspecialchars($info['title'], ENT_QUOTES, 'UTF-8') . '</span>';
+                $descHtml = '"<span style="color:#c9d1d9;font-style:italic;">' . htmlspecialchars($info['desc'], ENT_QUOTES, 'UTF-8') . '</span>"';
+                $rewardHtml = '<span style="color:#ff2a85;font-weight:bold;">' . htmlspecialchars($info['reward_text'], ENT_QUOTES, 'UTF-8') . '</span>';
+            }
 
             rawoutput('<tr style="background:' . $rowBg . ';border-bottom:1px solid #21262d;">');
             rawoutput('<td>' . $statusBadge . '</td>');
-            rawoutput('<td style="color:' . $titleColor . ';font-weight:bold;">' . htmlspecialchars($info['title'], ENT_QUOTES, 'UTF-8') . '</td>');
-            rawoutput('<td style="color:#c9d1d9;font-style:italic;">"' . htmlspecialchars($info['desc'], ENT_QUOTES, 'UTF-8') . '"</td>');
-            rawoutput('<td style="color:#ff2a85;font-weight:bold;">' . htmlspecialchars($info['reward_text'], ENT_QUOTES, 'UTF-8') . '</td>');
+            rawoutput('<td>' . $titleHtml . '</td>');
+            rawoutput('<td>' . $descHtml . '</td>');
+            rawoutput('<td>' . $rewardHtml . '</td>');
             rawoutput('</tr>');
         }
         rawoutput('</table>');

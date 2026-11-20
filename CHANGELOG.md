@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.4.0-alpha] - 2026-11-20
+
+### Added
+- **Expanded System AI Achievements & Secret Redacted Achievements (`modules/systemai.php`)**: Expanded the catalog from 14 to **32 achievements** (18 visible + **14 Hidden/Classified Secret Achievements**). Locked secret achievements appear as `??? [CLASSIFIED ACHIEVEMENT]` with redacted conditions and rewards in the Dossier until discovered, and trigger a special `★ SECRET ACHIEVEMENT UNLOCKED!` HUD popup when unlocked.
+
 ## [v0.3.11-alpha] - 2026-11-20
 
 ### Changed
