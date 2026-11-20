@@ -677,7 +677,20 @@ function dccclasses_dohook(string $hookname, array $args): array
                 $resline = (string) ($args['resline'] ?? '');
                 output("`#`b[FLOOR 1 SURVIVAL SPECIALTY]:`b `7Before entering the Corridors, pick your starting Dungeon combat style. (You will still unlock full Syndicate Races & Classes on Floor 3!)`0`n`n");
                 foreach (dccclasses_get_starter_specialties() as $code => $sp) {
-                    output("%s`b%s`b`0 — `7%s`0`n", $sp['color'], $sp['name'], $sp['desc']);
+                    output("`n%s`b=== %s ===`b`0`n", $sp['color'], $sp['name']);
+                    output("`7%s`0`n", $sp['desc']);
+                    output("`^Unlocked Combat Skills:`0`n");
+                    foreach ($sp['skills'] as $tier => $sk) {
+                        output(
+                            "  `7- %s%s`0 `7(Cost: `^%d use`7 | `^%d rds`7 | `^%d-%d+ bonus dmg`7)`n",
+                            $sp['color'],
+                            $sk['name'],
+                            $sk['cost'],
+                            $sk['rounds'],
+                            $sk['min_dmg'],
+                            $sk['max_dmg']
+                        );
+                    }
                     addnav($sp['color'] . $sp['name'] . '`0', 'newday.php?setspecialty=' . $code . $resline);
                 }
             }
@@ -770,7 +783,7 @@ function dccclasses_dohook(string $hookname, array $args): array
                 foreach ($sp['skills'] as $tier => $sk) {
                     if ($spUses >= $sk['cost']) {
                         addnav(
-                            ['&#9889; %s (`^%d`0)', $sk['name'], $sk['cost']],
+                            ['> %s (`^%d`0)', $sk['name'], $sk['cost']],
                             $script . 'op=fight&skill=dccstarter&l=' . (int) $tier,
                             true
                         );
@@ -792,7 +805,7 @@ function dccclasses_dohook(string $hookname, array $args): array
             foreach ($cInfo['skills'] as $tier => $skill) {
                 if ($charges >= $skill['cost']) {
                     addnav(
-                        ['&#9889; %s (`^%d`0)', $skill['name'], $skill['cost']],
+                        ['> %s (`^%d`0)', $skill['name'], $skill['cost']],
                         $script . 'op=fight&skill=dccclasses&l=' . (int) $tier,
                         true
                     );

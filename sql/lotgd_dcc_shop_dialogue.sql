@@ -126,6 +126,11 @@ INSERT INTO `translations` (`language`, `uri`, `intext`, `outtext`, `author`, `v
 ('en', 'clans', 'The clan name is shown on player bios and on clan overview pages while the short name is displayed next to players'' names in comment areas and such.`n', 'Your Party name appears on Crawler dossiers while your short squad tag displays beside your name in Safe Room comms.`n', 'System AI (Shop Dialogue)', '2.0.9+nb'),
 ('en', 'home', 'Legend of the Green Dragon', 'Dungeon Crawler World: Earth', 'System AI (Shop Dialogue)', '2.0.9+nb'),
 ('en', 'common', 'Legend of the Green Dragon', 'Dungeon Crawler World: Earth', 'System AI (Shop Dialogue)', '2.0.9+nb'),
-('en', 'common', 'Ye Olde Mail: %s new, %s old', 'Syndicate Comms: %s unread, %s archived', 'System AI (Shop Dialogue)', '2.0.9+nb');
+('en', 'common', 'Ye Olde Mail: %s new, %s old', 'Syndicate Comms: %s unread, %s archived', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'newday', 'A little history about yourself', 'Pre-Collapse Survival Profile', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'newday', 'What do you recall doing as a child?', 'Before the Collapse, what skills kept you alive when the World Dungeon opened?', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'newday', '`c`bA little history about yourself`b`c', '`c`b`#Pre-Collapse Survival Profile`0`b`c', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'common', 'A little history about yourself', 'Pre-Collapse Survival Profile', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'common', 'What do you recall doing as a child?', 'Before the Collapse, what skills kept you alive when the World Dungeon opened?', 'System AI (Shop Dialogue)', '2.0.9+nb');
 
 COMMIT;

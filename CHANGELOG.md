@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.4.3-alpha] - 2026-11-20
+
+### Fixed
+- **Combat Skill Labels & Specialty Selection Screen (`modules/dccclasses.php`, `sql/lotgd_dcc_shop_dialogue.sql`)**: Replaced escaped `&#9889;` entities in combat nav labels with clean `> ` prefixes, added full skill breakdowns (cost, rounds, bonus damage) for all 3 Floor 1 Specialties on the selection screen, and translated `newday.php` specialty prompts (`A little history about yourself` / `What do you recall doing as a child?`).
+
 ## [v0.4.2-alpha] - 2026-11-20
 
 ### Added
