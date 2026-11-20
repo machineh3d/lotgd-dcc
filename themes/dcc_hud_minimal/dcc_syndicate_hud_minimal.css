@@ -409,7 +409,7 @@ button:hover,
     animation: dccPulseBorder 2.6s infinite ease-in-out;
 }
 
-/* === DCC Compact Top Banner: Admin Quick Links (Left) | Centered Title | Syndicate Comms (Right) === */
+/* === DCC Compact Top Banner: Centered Title & Always-Visible Syndicate Comms === */
 .site-header {
     padding: 8px 16px !important;
 }
@@ -420,6 +420,7 @@ button:hover,
     gap: 12px !important;
     margin: 0 !important;
 }
+.site-header .header-info .motd,
 .site-header .header-info .petition,
 .site-header .mail-nav .mail-nav__link:nth-child(2) {
     display: none !important;
@@ -428,12 +429,6 @@ button:hover,
     width: auto !important;
     max-width: none !important;
     padding: 0 !important;
-}
-.site-header .header-info {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 6px !important;
 }
 .site-header .site-title {
     margin: 0 !important;
@@ -460,29 +455,9 @@ button:hover,
     white-space: nowrap !important;
     font-size: 0.86rem !important;
 }
-.dcc-admin-quicklinks {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    flex-wrap: wrap !important;
-}
-.dcc-admin-quicklinks a {
-    display: inline-block;
-    padding: 3px 9px;
-    font-family: Consolas, monospace;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #00f0ff !important;
-    background: rgba(0, 240, 255, 0.08);
-    border: 1px solid rgba(0, 240, 255, 0.45);
-    border-radius: 4px;
-    text-decoration: none !important;
-    white-space: nowrap;
-}
-.dcc-admin-quicklinks a:hover {
-    background: rgba(255, 42, 133, 0.2);
-    border-color: #ff2a85;
-    color: #ffffff !important;
+.site-header .mail-nav a.motd,
+.site-header .mail-nav a.hotmotd {
+    display: inline !important;
 }
 @media (max-width: 768px) {
     .site-header .row {
@@ -494,5 +469,3 @@ button:hover,
         justify-self: center !important;
     }
 }
-
-.site-header .mail-nav a.motd, .site-header .mail-nav a.hotmotd { display: inline !important; }

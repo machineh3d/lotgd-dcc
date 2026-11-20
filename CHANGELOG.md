@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.11-alpha] - 2026-11-20
+
+### Changed
+- **Clean Centered Top Banner (`themes/dcc_hud_minimal`, `themes/dcc_hud`, `modules/systemai.php`)**: Keeps the area title centered, hides MoTD and Petition links cleanly, always displays Syndicate Comms (0 unread or unread), and removes the experimental top-bar admin quick links.
+
 ## [v0.3.10-alpha] - 2026-11-20
 
 ### Fixed

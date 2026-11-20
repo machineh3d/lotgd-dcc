@@ -60,8 +60,6 @@ function systemai_install(): bool
     module_addhook('weaponstext');
     module_addhook('armortext');
     module_addhook('stabletext');
-    module_addhook('everyheader');
-    module_addhook('motd-link');
     module_addhook('charstats');
     module_addhook('everyhit-loggedin');
     module_addhook('bioinfo');
@@ -322,49 +320,6 @@ function systemai_render_pending_popups(): void
 }
 
 
-/**
- * Renders top-banner Quick Links (Grotto, Modules, Users) for Admin & Module Editors,
- * registering allowed navs via addnav() so clicking never triggers badnav.php.
- */
-function systemai_get_admin_quicklinks_html(bool $registerNavs = false): string
-{
-    global $session;
-
-    $su = (int) ($session['user']['superuser'] ?? 0);
-    if ($su <= 0) {
-        return '';
-    }
-
-    $links = [];
-    $noGrottoFlag = defined('SU_DOESNT_GIVE_GROTTO') ? (int) SU_DOESNT_GIVE_GROTTO : 0;
-    if ($noGrottoFlag === 0 || ($su & ~$noGrottoFlag)) {
-        if ($registerNavs) {
-            addnav('', 'superuser.php');
-        }
-        $links[] = '<a href="superuser.php">Grotto</a>';
-    }
-
-    if (!defined('SU_MANAGE_MODULES') || ($su & (int) SU_MANAGE_MODULES)) {
-        if ($registerNavs) {
-            addnav('', 'modules.php');
-        }
-        $links[] = '<a href="modules.php">Modules</a>';
-    }
-
-    if (!defined('SU_EDIT_USERS') || ($su & (int) SU_EDIT_USERS)) {
-        if ($registerNavs) {
-            addnav('', 'user.php');
-        }
-        $links[] = '<a href="user.php">Users</a>';
-    }
-
-    if ($links === []) {
-        return '';
-    }
-
-    return '<div class="dcc-admin-quicklinks">' . implode('', $links) . '</div>';
-}
-
 function systemai_dohook(string $hookname, array $args): array
 {
     global $session;
@@ -420,14 +375,6 @@ function systemai_dohook(string $hookname, array $args): array
             $args['nosuchbeast'] = '`7"`&No such companion is registered in the Menagerie kennels, Crawler!`7" the handler barks.';
             $args['replacemount'] = '`7You transfer %s`7 to your Personal Space lounge, wire the Syndicate credits, and bond with your new companion `&%s`7!`n`n';
             $args['newmount'] = '`7You wire the credits and break open an Enhanced Pet Biscuit—`&%s`7 bounds out of the kennel and bonds to your party!`n`n';
-            break;
-
-        case 'everyheader':
-            systemai_get_admin_quicklinks_html(true);
-            break;
-
-        case 'motd-link':
-            $args['link'] = systemai_get_admin_quicklinks_html(false);
             break;
 
         case 'everyhit-loggedin':
