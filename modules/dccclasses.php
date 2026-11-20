@@ -45,6 +45,8 @@ function dccclasses_getmoduleinfo(): array
             'skill_charges' => 'Remaining Class Skill Charges today,int|6',
             'max_charges' => 'Maximum Class Skill Charges today,int|6',
             'earth_box_claimed' => 'Has claimed the Silver Earth Class/Race incentive box?,bool|0',
+            'starter_level' => 'Floor 1 Starting Specialty Skill Level,int|1',
+            'starter_uses' => 'Remaining Floor 1 Specialty Uses today,int|3',
         ],
     ];
 }
@@ -53,6 +55,12 @@ function dccclasses_install(): bool
 {
     module_addhook('chooserace');
     module_addhook('setrace');
+    module_addhook('choose-specialty');
+    module_addhook('set-specialty');
+    module_addhook('specialtynames');
+    module_addhook('specialtycolor');
+    module_addhook('specialtymodules');
+    module_addhook('incrementspecialty');
     module_addhook('village');
     module_addhook('newday');
     module_addhook('fightnav-specialties');
@@ -468,6 +476,145 @@ function dccclasses_get_subclasses(): array
     ];
 }
 
+/**
+ * Returns the 3 canonical Floor 1 Starting Specialties replacing stock LotGD
+ * Dark Arts / Mystical Powers / Thieving Skills.
+ */
+function dccclasses_get_starter_specialties(): array
+{
+    return [
+        'DM' => [
+            'name' => 'Improvised Demolition',
+            'color' => '`$',
+            'desc' => 'Carl-style goblin explosives, flashbangs, and jury-rigged fuse charges.',
+            'skills' => [
+                1 => [
+                    'name' => 'Hobgoblin Flashbang',
+                    'cost' => 1,
+                    'rounds' => 4,
+                    'atkmod' => 1.18,
+                    'defmod' => 1.15,
+                    'min_dmg' => 4,
+                    'max_dmg' => 12,
+                    'roundmsg' => '`$Blinding goblin magnesium sparks disorient {badguy}!`0',
+                    'effectmsg' => '`$Flashbang concussive blast hits {badguy} for `^{damage}`$ damage!`0',
+                    'wearoff' => 'The ringing in the corridor fades.',
+                ],
+                2 => [
+                    'name' => 'Improvised Pipe-Bomb Toss',
+                    'cost' => 2,
+                    'rounds' => 5,
+                    'atkmod' => 1.32,
+                    'defmod' => 1.05,
+                    'min_dmg' => 10,
+                    'max_dmg' => 24,
+                    'roundmsg' => '`$You pitch a duct-taped shrapnel charge straight at {badguy}!`0',
+                    'effectmsg' => '`$BOOM! Shrapnel shreds {badguy} for `^{damage}`$ explosive damage!`0',
+                    'wearoff' => 'The smoke from your pipe-bomb clears.',
+                ],
+                3 => [
+                    'name' => 'Sapper Fuse-Chain Detonation',
+                    'cost' => 3,
+                    'rounds' => 6,
+                    'atkmod' => 1.48,
+                    'defmod' => 1.10,
+                    'min_dmg' => 16,
+                    'max_dmg' => 38,
+                    'roundmsg' => '`$A daisy-chain of goblin dynamite lights up the hallway!`0',
+                    'effectmsg' => '`$KA-BOOM!! The shockwave blasts {badguy} for `^{damage}`$ damage!`0',
+                    'wearoff' => 'Your demolition charges burn out.',
+                ],
+            ],
+        ],
+        'BG' => [
+            'name' => 'Broadcast Glamour & Magic',
+            'color' => '`5',
+            'desc' => 'Princess Donut-style Magic Missiles, spotlight shields, and crowd-pleasing arcane bursts.',
+            'skills' => [
+                1 => [
+                    'name' => 'Magic Missile Barrage',
+                    'cost' => 1,
+                    'rounds' => 4,
+                    'atkmod' => 1.20,
+                    'defmod' => 1.10,
+                    'min_dmg' => 5,
+                    'max_dmg' => 13,
+                    'roundmsg' => '`5Neon-pink Magic Missiles streak toward {badguy} for the cameras!`0',
+                    'effectmsg' => '`5Arcane bolts strike {badguy} for `^{damage}`5 damage!`0',
+                    'wearoff' => 'Your Magic Missile aura dissipates.',
+                ],
+                2 => [
+                    'name' => 'Syndicate Spotlight Shield',
+                    'cost' => 2,
+                    'rounds' => 5,
+                    'atkmod' => 1.15,
+                    'defmod' => 1.42,
+                    'min_dmg' => 6,
+                    'max_dmg' => 16,
+                    'roundmsg' => '`5A dazzling broadcast spotlight deflects {badguy}\'s attacks!`0',
+                    'effectmsg' => '`5Blinding glare sears {badguy} for `^{damage}`5 damage!`0',
+                    'wearoff' => 'The Syndicate spotlight dims.',
+                ],
+                3 => [
+                    'name' => 'Prime-Time Rating Overload',
+                    'cost' => 3,
+                    'rounds' => 6,
+                    'atkmod' => 1.42,
+                    'defmod' => 1.32,
+                    'min_dmg' => 14,
+                    'max_dmg' => 34,
+                    'roundmsg' => '`5Millions of galactic viewers cheer as your glamour spell surges!`0',
+                    'effectmsg' => '`5Showstopper arcane burst blasts {badguy} for `^{damage}`5 damage!`0',
+                    'wearoff' => 'The prime-time camera drones pull back.',
+                ],
+            ],
+        ],
+        'CB' => [
+            'name' => 'Close-Quarters Brawling & Grit',
+            'color' => '`#',
+            'desc' => 'Barefoot stomps, riot-baton counters, and relentless close-range survival tactics.',
+            'skills' => [
+                1 => [
+                    'name' => 'Barefoot Stomp Crush',
+                    'cost' => 1,
+                    'rounds' => 4,
+                    'atkmod' => 1.24,
+                    'defmod' => 1.12,
+                    'min_dmg' => 4,
+                    'max_dmg' => 12,
+                    'roundmsg' => '`#The System AI zooms in on your brutal close-quarters footwork!`0',
+                    'effectmsg' => '`#Your stomping strike crushes {badguy} for `^{damage}`# damage!`0',
+                    'wearoff' => 'You reset your brawling stance.',
+                ],
+                2 => [
+                    'name' => 'Tactical Riot-Baton Counter',
+                    'cost' => 2,
+                    'rounds' => 5,
+                    'atkmod' => 1.25,
+                    'defmod' => 1.38,
+                    'min_dmg' => 8,
+                    'max_dmg' => 20,
+                    'roundmsg' => '`#You parry {badguy} cleanly and drive a heavy counter-strike!`0',
+                    'effectmsg' => '`#Your counter-blow staggers {badguy} for `^{damage}`# damage!`0',
+                    'wearoff' => 'Your defensive counter rhythm ends.',
+                ],
+                3 => [
+                    'name' => 'Adrenaline Berserker Grapple',
+                    'cost' => 3,
+                    'rounds' => 6,
+                    'atkmod' => 1.50,
+                    'defmod' => 1.25,
+                    'min_dmg' => 14,
+                    'max_dmg' => 34,
+                    'roundmsg' => '`#Pure Floor-survival adrenaline turns you into a wrecking ball!`0',
+                    'effectmsg' => '`#You slam {badguy} into the concrete for `^{damage}`# damage!`0',
+                    'wearoff' => 'Your adrenaline rush subsides.',
+                ],
+            ],
+        ],
+    ];
+}
+
 function dccclasses_dohook(string $hookname, array $args): array
 {
     global $session;
@@ -507,6 +654,57 @@ function dccclasses_dohook(string $hookname, array $args): array
             }
             break;
 
+        case 'specialtynames':
+            foreach (dccclasses_get_starter_specialties() as $code => $sp) {
+                $args[$code] = $sp['name'];
+            }
+            break;
+
+        case 'specialtycolor':
+            foreach (dccclasses_get_starter_specialties() as $code => $sp) {
+                $args[$code] = $sp['color'];
+            }
+            break;
+
+        case 'specialtymodules':
+            foreach (dccclasses_get_starter_specialties() as $code => $sp) {
+                $args[$code] = 'dccclasses';
+            }
+            break;
+
+        case 'choose-specialty':
+            if (($session['user']['specialty'] ?? '') === '' || ($session['user']['specialty'] ?? '') === '0') {
+                $resline = (string) ($args['resline'] ?? '');
+                output("`#`b[FLOOR 1 SURVIVAL SPECIALTY]:`b `7Before entering the Corridors, pick your starting Dungeon combat style. (You will still unlock full Syndicate Races & Classes on Floor 3!)`0`n`n");
+                foreach (dccclasses_get_starter_specialties() as $code => $sp) {
+                    output("%s`b%s`b`0 — `7%s`0`n", $sp['color'], $sp['name'], $sp['desc']);
+                    addnav($sp['color'] . $sp['name'] . '`0', 'newday.php?setspecialty=' . $code . $resline);
+                }
+            }
+            break;
+
+        case 'set-specialty':
+            $chosen = (string) ($session['user']['specialty'] ?? '');
+            $starters = dccclasses_get_starter_specialties();
+            if (isset($starters[$chosen])) {
+                set_module_pref('starter_level', max(1, (int) get_module_pref('starter_level', 'dccclasses')), 'dccclasses');
+                set_module_pref('starter_uses', 3, 'dccclasses');
+                output("`@[SYSTEM AI]:`0 `2Floor 1 Survival Specialty locked in: %s`b%s`b`2! Your HUD combat menu now includes active tactical skills!`0`n", $starters[$chosen]['color'], $starters[$chosen]['name']);
+            }
+            break;
+
+        case 'incrementspecialty':
+            $chosen = (string) ($session['user']['specialty'] ?? '');
+            $starters = dccclasses_get_starter_specialties();
+            if (isset($starters[$chosen])) {
+                $curLvl = max(1, (int) get_module_pref('starter_level', 'dccclasses')) + 1;
+                set_module_pref('starter_level', $curLvl, 'dccclasses');
+                $curUses = (int) get_module_pref('starter_uses', 'dccclasses') + 1;
+                set_module_pref('starter_uses', $curUses, 'dccclasses');
+                output("`n%s`b[SPECIALTY LEVEL UP]:`b `2Your %s mastery rose to Rank `^%d`2 (+1 daily combat use)!`0`n", $starters[$chosen]['color'], $starters[$chosen]['name'], $curLvl);
+            }
+            break;
+
         case 'newday':
             $baseCharges = max(1, (int) get_module_setting('base_daily_charges', 'dccclasses'));
             $bonusCharges = 0;
@@ -532,6 +730,8 @@ function dccclasses_dohook(string $hookname, array $args): array
             $totalCharges = $baseCharges + $bonusCharges;
             set_module_pref('max_charges', $totalCharges, 'dccclasses');
             set_module_pref('skill_charges', $totalCharges, 'dccclasses');
+            $starterLvl = max(1, (int) get_module_pref('starter_level', 'dccclasses'));
+            set_module_pref('starter_uses', min(12, 2 + $starterLvl), 'dccclasses');
 
             if ($turnsBonus > 0) {
                 $session['user']['turns'] += $turnsBonus;
@@ -559,6 +759,24 @@ function dccclasses_dohook(string $hookname, array $args): array
             break;
 
         case 'fightnav-specialties':
+            $script = (string) ($args['script'] ?? '');
+            // Floor 1 Starting Specialty Skills
+            $spCode = (string) ($session['user']['specialty'] ?? '');
+            $starters = dccclasses_get_starter_specialties();
+            $spUses = (int) get_module_pref('starter_uses', 'dccclasses');
+            if (isset($starters[$spCode]) && $spUses > 0) {
+                $sp = $starters[$spCode];
+                addnav(['%s%s`0 (`^%d`0)', $sp['color'], $sp['name'], $spUses]);
+                foreach ($sp['skills'] as $tier => $sk) {
+                    if ($spUses >= $sk['cost']) {
+                        addnav(
+                            ['&#9889; %s (`^%d`0)', $sk['name'], $sk['cost']],
+                            $script . 'op=fight&skill=dccstarter&l=' . (int) $tier,
+                            true
+                        );
+                    }
+                }
+            }
             if (!isset($classes[$classId])) {
                 break;
             }
@@ -584,6 +802,34 @@ function dccclasses_dohook(string $hookname, array $args): array
 
         case 'apply-specialties':
             $skillParam = (string) httpget('skill');
+            if ($skillParam === 'dccstarter') {
+                $spCode = (string) ($session['user']['specialty'] ?? '');
+                $starters = dccclasses_get_starter_specialties();
+                $tier = (int) httpget('l');
+                $spUses = (int) get_module_pref('starter_uses', 'dccclasses');
+                if (isset($starters[$spCode]['skills'][$tier])) {
+                    $sp = $starters[$spCode];
+                    $sk = $sp['skills'][$tier];
+                    if ($spUses >= $sk['cost']) {
+                        set_module_pref('starter_uses', $spUses - $sk['cost'], 'dccclasses');
+                        $lvlScale = max(1, (int) ($session['user']['level'] ?? 1));
+                        apply_buff('dcc_starter_' . $spCode . '_' . $tier, [
+                            'name' => $sp['color'] . $sk['name'] . '`0',
+                            'rounds' => $sk['rounds'],
+                            'atkmod' => $sk['atkmod'],
+                            'defmod' => $sk['defmod'],
+                            'minioncount' => 1,
+                            'minbadguydamage' => $sk['min_dmg'] + $lvlScale,
+                            'maxbadguydamage' => $sk['max_dmg'] + ($lvlScale * 2),
+                            'roundmsg' => $sk['roundmsg'],
+                            'effectmsg' => $sk['effectmsg'],
+                            'wearoff' => $sk['wearoff'],
+                            'schema' => 'module-dccclasses',
+                        ]);
+                    }
+                }
+                break;
+            }
             if ($skillParam !== 'dccclasses' || !isset($classes[$classId])) {
                 break;
             }

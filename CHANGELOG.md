@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.4.2-alpha] - 2026-11-20
+
+### Added
+- **DCC Floor 1 Starting Specialties (`modules/dccclasses.php`, `Dockerfile`, `install.sh`)**: Replaced stock medieval specialties (`specialtydarkarts`, `specialtymysticpower`, `specialtythiefskills`) with 3 canonical Floor 1 Survival Specialties (**Improvised Demolition**, **Broadcast Glamour & Magic**, and **Close-Quarters Brawling & Grit**) with 3 combat skill tiers each.
+
 ## [v0.4.1-alpha] - 2026-11-20
 
 ### Fixed

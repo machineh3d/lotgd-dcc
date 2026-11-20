@@ -102,7 +102,7 @@ final class Version20261119000100 extends AbstractMigration
         if (Database::tableExists($modulesTable)) {
             $this->addSql(
                 "UPDATE `{$modulesTable}` SET `active` = 0 "
-                . "WHERE `modulename` IN ('raceelf', 'racedwarf', 'racetroll', 'racehuman', 'oldman', 'statue', 'fairy')"
+                . "WHERE `modulename` IN ('raceelf', 'racedwarf', 'racetroll', 'racehuman', 'oldman', 'statue', 'fairy', 'specialtydarkarts', 'specialtymysticpower', 'specialtythiefskills')"
             );
         }
     }

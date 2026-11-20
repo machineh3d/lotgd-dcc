@@ -17,7 +17,10 @@ RUN rm -f /var/www/html/modules/raceelf.php \
           /var/www/html/modules/racehuman.php \
           /var/www/html/modules/oldman.php \
           /var/www/html/modules/statue.php \
-          /var/www/html/modules/fairy.php
+          /var/www/html/modules/fairy.php \
+          /var/www/html/modules/specialtydarkarts.php \
+          /var/www/html/modules/specialtymysticpower.php \
+          /var/www/html/modules/specialtythiefskills.php
 COPY modules/*.php /var/www/html/modules/
 
 # 2. Bake SQL lore packs & helper script for post-install / upgrade seeding
