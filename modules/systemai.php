@@ -319,6 +319,46 @@ function systemai_render_pending_popups(): void
     }
 }
 
+
+/**
+ * Renders top-banner Quick Links (Grotto, Modules, Users) for Admin & Module Editors,
+ * registering allowed navs via addnav() so clicking never triggers badnav.php.
+ */
+function systemai_render_admin_quicklinks(): void
+{
+    global $session;
+
+    $su = (int) ($session['user']['superuser'] ?? 0);
+    if ($su <= 0) {
+        return;
+    }
+
+    $links = [];
+    if (!defined('SU_DOESNT_GIVE_GROTTO') || ($su & ~SU_DOESNT_GIVE_GROTTO)) {
+        addnav('', 'superuser.php');
+        $links[] = '<a href="superuser.php">Grotto</a>';
+    }
+    if (defined('SU_MANAGE_MODULES') && ($su & SU_MANAGE_MODULES)) {
+        addnav('', 'modules.php');
+        $links[] = '<a href="modules.php">Modules</a>';
+    }
+    if (defined('SU_EDIT_USERS') && ($su & SU_EDIT_USERS)) {
+        addnav('', 'user.php');
+        $links[] = '<a href="user.php">Users</a>';
+    }
+
+    if ($links === []) {
+        return;
+    }
+
+    $html = '<div class="dcc-admin-quicklinks">' . implode('', $links) . '</div>';
+    $jsonHtml = json_encode($html, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+
+    rawoutput(
+        "<script>(function(){var h=" . $jsonHtml . ";function m(){var el=document.querySelector('.site-header .header-info');if(el && !el.querySelector('.dcc-admin-quicklinks')){el.insertAdjacentHTML('beforeend',h);}}if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',m);}else{m();}})();</script>"
+    );
+}
+
 function systemai_dohook(string $hookname, array $args): array
 {
     global $session;
@@ -381,6 +421,7 @@ function systemai_dohook(string $hookname, array $args): array
                 systemai_unlock_achievement('wealth_hoarder');
             }
             systemai_render_pending_popups();
+            systemai_render_admin_quicklinks();
             break;
 
         case 'newday':

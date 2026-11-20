@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.8-alpha] - 2026-11-19
+
+### Changed
+- **Compact Top HUD Banner (`themes/dcc_hud_minimal`, `themes/dcc_hud`)**: Removed MoTD and Petition links from `.site-header` and auto-sized the Syndicate Comms pill to tightly fit its text on a clean single-row flex bar.
+
 ## [v0.3.7-alpha] - 2026-11-19
 
 ### Fixed
