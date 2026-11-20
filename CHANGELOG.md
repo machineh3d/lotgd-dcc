@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.7-alpha] - 2026-11-19
+
+### Fixed
+- **Pre-Login Banner & Syndicate Comms Link (`sql/lotgd_dcc_shop_dialogue.sql`)**: Added exact `Header.php` default title overrides (`Legend of the Green Dragon` -> `Dungeon Crawler World: Earth`), `meta_description`, and the `PageParts.php` top-bar mail format string (`Ye Olde Mail: %s new, %s old` -> `Syndicate Comms: %s unread, %s archived`).
+
 ## [v0.3.6-alpha] - 2026-11-19
 
 ### Added

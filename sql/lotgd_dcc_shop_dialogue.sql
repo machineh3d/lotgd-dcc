@@ -16,7 +16,8 @@ START TRANSACTION;
 INSERT INTO `settings` (`setting`, `value`) VALUES
 ('enabletranslation', '1'),
 ('defaultlanguage', 'en'),
-('gamename', 'Dungeon Crawler World: Earth')
+('gamename', 'Dungeon Crawler World: Earth'),
+('meta_description', 'Dungeon Crawler World: Earth — Borant Corporation Syndicate Broadcast')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
 DELETE FROM `translations`
@@ -122,6 +123,9 @@ INSERT INTO `translations` (`language`, `uri`, `intext`, `outtext`, `author`, `v
 ('en', 'clans', '`b`cNew Clan Application Form`c`b', '`b`c`$New Crawler Party Charter`0`c`b', 'System AI (Shop Dialogue)', '2.0.9+nb'),
 ('en', 'clans', 'Clan Name: ', 'Crawler Party Name: ', 'System AI (Shop Dialogue)', '2.0.9+nb'),
 ('en', 'clans', '`nNote, color codes are permitted in neither clan names nor short names.', '`nNote: Syndicate color codes are not permitted in Party names or squad tags.', 'System AI (Shop Dialogue)', '2.0.9+nb'),
-('en', 'clans', 'The clan name is shown on player bios and on clan overview pages while the short name is displayed next to players'' names in comment areas and such.`n', 'Your Party name appears on Crawler dossiers while your short squad tag displays beside your name in Safe Room comms.`n', 'System AI (Shop Dialogue)', '2.0.9+nb');
+('en', 'clans', 'The clan name is shown on player bios and on clan overview pages while the short name is displayed next to players'' names in comment areas and such.`n', 'Your Party name appears on Crawler dossiers while your short squad tag displays beside your name in Safe Room comms.`n', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'home', 'Legend of the Green Dragon', 'Dungeon Crawler World: Earth', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'common', 'Legend of the Green Dragon', 'Dungeon Crawler World: Earth', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'common', 'Ye Olde Mail: %s new, %s old', 'Syndicate Comms: %s unread, %s archived', 'System AI (Shop Dialogue)', '2.0.9+nb');
 
 COMMIT;
