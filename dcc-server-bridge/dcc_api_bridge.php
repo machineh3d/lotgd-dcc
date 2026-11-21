@@ -164,7 +164,7 @@ function dcc_api_new_day_timing(string $plainTextFallback = ''): array
         $next = max(1, $perDay - $elapsed);
     }
 
-    return ['next' => $next, 'perDay' => $perDay];
+    if ($next > $perDay && $perDay > 0) { $next = ($next % $perDay) ?: $perDay; } return ['next' => $next, 'perDay' => $perDay];
 }
 
 function dcc_api_is_data_table(DOMXPath $xpath, DOMElement $table): bool
