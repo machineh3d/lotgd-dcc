@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.3-alpha] - 2026-11-20
+
+### Added
+- **PvP-Safe Personal Space Logout & Borant Security Breach Bribes (`modules/personalspace.php`)**: Players can now lock their Safe Room blast door and log out safely from PvP (free with an Alleviating Sleep Apparatus bed, or a small Gold fee), while Player Killers can pay a heavy Borant Producer bribe (`1000G * Target Level + 5 Sponsor Tokens`) to override a sleeping Crawler's door (countered by up to 40% Bopca Security chance from upgraded beds).
+
 ## [v0.5.2-alpha] - 2026-11-20
 
 ### Fixed

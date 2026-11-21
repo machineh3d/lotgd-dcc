@@ -36,6 +36,9 @@ function personalspace_getmoduleinfo(): array
             'base_table_gems' => 'Base Sponsor Token (Gem) cost to install/upgrade a Crafting Table,int|4',
             'daily_crafts_allowed' => 'Maximum daily workbench crafts per broadcast cycle,int|2',
             'allow_table_exploit' => 'Allow Carl\'s Indestructible Crafting Table combat shield exploit?,bool|1',
+            'sleep_base_gold' => 'Gold Credit fee per level to lock Safe Room if Bed is unbuilt (free at Bed Lv1+),int|25',
+            'bribe_gold_per_lvl' => 'Heavy Gold Credit bribe per target level to breach a sleeping Crawler Safe Room,int|1000',
+            'bribe_gems' => 'Sponsor Token (Gem) bribe required to breach a sleeping Crawler Safe Room,int|5',
         ],
         'prefs' => [
             'Personal Space Upgrades & Table Levels,title',
@@ -411,6 +414,153 @@ function personalspace_run(): void
     }
 
     // ========================================================================
+    // 2B. SAFE ROOM PVP-PROTECTED SLEEP & LOGOUT (`op=sleep`)
+    // ========================================================================
+    if ($op === 'sleep') {
+        $bedLvl = (int) get_module_pref('bed_lvl', 'personalspace');
+        $level = max(1, (int) ($session['user']['level'] ?? 1));
+        $sleepFee = ($bedLvl > 0) ? 0 : (max(0, (int) get_module_setting('sleep_base_gold', 'personalspace')) * $level);
+
+        if ($sleepFee > 0 && (int) ($session['user']['gold'] ?? 0) < $sleepFee) {
+            output("`\$`b[INSUFFICIENT CREDITS]:`b `7Without an Alleviating Sleep Apparatus installed, the Bopca charges `^%s Gold Credits`7 to engage the overnight blast-door lock.`0`n`n", number_format($sleepFee));
+        } else {
+            if ($sleepFee > 0) {
+                $session['user']['gold'] -= $sleepFee;
+            }
+            if ($bedLvl > 0 && (int) $session['user']['hitpoints'] < (int) $session['user']['maxhitpoints']) {
+                $session['user']['hitpoints'] = (int) $session['user']['maxhitpoints'];
+            }
+
+            $innName = (string) getsetting('innname', 'The Desperado Club');
+            $session['user']['boughtroomtoday'] = 1;
+            $session['user']['location'] = $innName;
+            $session['user']['loggedin'] = 0;
+
+            output("`@`b[SAFE ROOM BLAST DOOR SEALED — PVP PROTECTED]:`b `2You engage the titanium Safe Room deadbolt and power down your HUD for the night. Ordinary Player Killers cannot touch you while you sleep—unless someone pays an outrageous bribe to a corrupt Borant Producer!`0`n`n");
+            if ($bedLvl > 0) {
+                output("`#Your Level %d Alleviating Sleep Apparatus locks in for FREE (and grants a full HP restore + bonus Stamina tomorrow)!`0`n`n", $bedLvl);
+            } else {
+                output("`7Paid `^%s Gold Credits`7 for overnight blast-door security. (Install the Alleviating Sleep Apparatus to sleep for free!)`0`n`n", number_format($sleepFee));
+            }
+
+            saveuser();
+            addnav('Login Screen', 'index.php');
+            page_footer();
+            return;
+        }
+    }
+
+    // ========================================================================
+    // 2C. BORANT SECURITY BRIBE — RAID A SLEEPING CRAWLER (`op=breach_list` / `op=breach_exec`)
+    // ========================================================================
+    if ($op === 'breach_exec') {
+        $targetId = (int) httpget('target');
+        $myId = (int) ($session['user']['acctid'] ?? 0);
+        $myLvl = max(1, (int) ($session['user']['level'] ?? 1));
+        $accountsTable = db_prefix('accounts');
+        $sql = "SELECT acctid, name, level, boughtroomtoday, alive, loggedin FROM {$accountsTable} WHERE acctid = {$targetId} LIMIT 1";
+        $res = db_query($sql);
+        $target = db_fetch_assoc($res);
+
+        if (!$target || $targetId === $myId) {
+            output("`\$`b[INVALID TARGET]:`b `7That Crawler could not be located in the Safe Room registry.`0`n`n");
+        } elseif ((int) $target['alive'] !== 1 || (int) $target['boughtroomtoday'] !== 1) {
+            output("`7%s is not currently locked inside a PvP-protected Safe Room—just hunt them normally in the PvP Arena!`0`n`n", (string) $target['name']);
+        } elseif (abs((int) $target['level'] - $myLvl) > 2) {
+            output("`\$`b[BORANT BRACKET LOCK]:`b `7Showrunner bribes only work on Crawlers within 2 levels of you (Target is Level %d).`0`n`n", (int) $target['level']);
+        } else {
+            $tLvl = max(1, (int) $target['level']);
+            $bribeGold = max(500, (int) get_module_setting('bribe_gold_per_lvl', 'personalspace')) * $tLvl;
+            $bribeGems = max(1, (int) get_module_setting('bribe_gems', 'personalspace'));
+
+            if ((int) $session['user']['gold'] < $bribeGold || (int) $session['user']['gems'] < $bribeGems) {
+                output("`\$`b[BRIBE REJECTED]:`b `7The corrupt Borant Producer scoffs at your pockets. Overriding a Level %d Safe Room costs `^%s Gold Credits`7 and `5%d Sponsor Tokens (Gems)`7!`0`n`n", $tLvl, number_format($bribeGold), $bribeGems);
+            } else {
+                $targetBedLvl = (int) get_module_pref('bed_lvl', 'personalspace', $targetId);
+                $blockChance = min(40, $targetBedLvl * 10);
+
+                if ($blockChance > 0 && e_rand(1, 100) <= $blockChance) {
+                    // Defender Bopca caught the bribe! Half gold forfeited.
+                    $fine = (int) round($bribeGold * 0.5);
+                    $session['user']['gold'] = max(0, (int) $session['user']['gold'] - $fine);
+                    output("`\$`b[BRIBE INTERCEPTED BY BOPCA SECURITY!]:`b `4%s\'s Level %d Safe Room security tripped a silent alarm! The Bopca Protector confiscated `^%s Gold Credits`4 (50 percent penalty) and kept the blast door sealed!`0`n`n", (string) $target['name'], $targetBedLvl, number_format($fine));
+                    addnews(
+                        '`#Crawler `^%s`# tried to bribe Borant Security to raid `^%s`#\'s Safe Room, but a Bopca Protector shut them down!',
+                        $session['user']['name'],
+                        (string) $target['name']
+                    );
+                } else {
+                    $session['user']['gold'] -= $bribeGold;
+                    $session['user']['gems'] -= $bribeGems;
+                    $villageName = db_escape((string) getsetting('villagename', 'Bopca Safe Room Hub'));
+                    db_query("UPDATE {$accountsTable} SET boughtroomtoday = 0, location = '{$villageName}' WHERE acctid = {$targetId}");
+
+                    output("`$`b[SAFE ROOM BLAST DOOR OVERRIDDEN!]:`b `@You wired `^%s Gold Credits`2 and `5%d Sponsor Tokens`2 to a shady Borant Producer! A loud hydraulic hiss echoes down the corridor—`^%s`2\'s Safe Room door is now WIDE OPEN and they are exposed in the Crawler PvP Arena!`0`n`n", number_format($bribeGold), $bribeGems, (string) $target['name']);
+                    addnews(
+                        '`$`b[SYNDICATE SECURITY BREACH]:`b `^%s`$ bribed a corrupt Borant Producer to pop open `^%s`$\'s locked Safe Room door!',
+                        $session['user']['name'],
+                        (string) $target['name']
+                    );
+                    addnav('`$Enter Crawler PvP Arena Now!`0', 'pvp.php');
+                }
+            }
+        }
+        $op = 'breach_list';
+    }
+
+    if ($op === 'breach_list') {
+        $myId = (int) ($session['user']['acctid'] ?? 0);
+        $myLvl = max(1, (int) ($session['user']['level'] ?? 1));
+        $minLvl = max(1, $myLvl - 2);
+        $maxLvl = $myLvl + 2;
+        $bribePerLvl = max(500, (int) get_module_setting('bribe_gold_per_lvl', 'personalspace'));
+        $bribeGems = max(1, (int) get_module_setting('bribe_gems', 'personalspace'));
+
+        $accountsTable = db_prefix('accounts');
+        $sql = "SELECT acctid, name, level, dragonkills FROM {$accountsTable}
+                WHERE alive = 1 AND boughtroomtoday = 1 AND loggedin = 0
+                  AND acctid <> {$myId} AND level BETWEEN {$minLvl} AND {$maxLvl}
+                ORDER BY level DESC, acctid ASC LIMIT 20";
+        $res = db_query($sql);
+
+        output("`b`$=== BORANT PRODUCER BACKCHANNEL: SAFE ROOM BREACH BRIBES ===`b`0`n");
+        output("`7Pay a heavy Syndicate bribe (`^%s Gold x Target Level`7 + `5%d Sponsor Tokens`7) to unlock an offline Crawler\'s PvP-protected Safe Room door and expose them in the PvP Arena. (Upgraded Safe Room Beds give defenders up to a 40 percent Bopca Counter-Security block chance.)`0`n`n", number_format($bribePerLvl), $bribeGems);
+
+        $found = 0;
+        rawoutput('<table class="table table-striped table-dark"><thead><tr><th>Sleeping Crawler</th><th>Level</th><th>Bribe Cost</th><th>Bopca Block Chance</th><th>Action</th></tr></thead><tbody>');
+        while ($row = db_fetch_assoc($res)) {
+            $found++;
+            $tid = (int) $row['acctid'];
+            $tlvl = max(1, (int) $row['level']);
+            $costG = $bribePerLvl * $tlvl;
+            $tBed = (int) get_module_pref('bed_lvl', 'personalspace', $tid);
+            $blk = min(40, $tBed * 10);
+            $url = "runmodule.php?module=personalspace&op=breach_exec&target={$tid}";
+            addnav('', $url);
+            rawoutput(sprintf(
+                '<tr><td><strong>%s</strong></td><td>Lv %d</td><td>%s Gold + %d Gems</td><td>%d percent</td><td><a href="%s" style="color:#ff2a85;font-weight:bold;">[Pay Bribe &amp; Unlock]</a></td></tr>',
+                htmlentities((string) preg_replace('/`./', '', (string) $row['name']), ENT_QUOTES, 'UTF-8'),
+                $tlvl,
+                number_format($costG),
+                $bribeGems,
+                $blk,
+                htmlentities($url, ENT_QUOTES, 'UTF-8')
+            ));
+        }
+        if ($found === 0) {
+            rawoutput('<tr><td colspan="5"><em>No offline Crawlers within your level bracket (Lv ' . $minLvl . '-' . $maxLvl . ') are currently locked inside Safe Rooms.</em></td></tr>');
+        }
+        rawoutput('</tbody></table>');
+
+        addnav('Backchannel Actions');
+        addnav('Return to Personal Space', 'runmodule.php?module=personalspace');
+        addnav('Crawler PvP Arena', 'pvp.php');
+        addnav('Return to Safe Room Hub', 'village.php');
+        page_footer();
+        return;
+    }
+
+    // ========================================================================
     // 3. RENDER PERSONAL SPACE STUDIO DASHBOARD
     // ========================================================================
     rawoutput('
@@ -479,6 +629,16 @@ function personalspace_run(): void
             "runmodule.php?module=personalspace&op=upgrade&station={$sKey}"
         );
     }
+
+    $bedLvlNav = (int) get_module_pref('bed_lvl', 'personalspace');
+    $sleepFeeNav = ($bedLvlNav > 0) ? 0 : (max(0, (int) get_module_setting('sleep_base_gold', 'personalspace')) * max(1, (int) ($session['user']['level'] ?? 1)));
+    addnav('Safe Room Security');
+    if ($sleepFeeNav === 0) {
+        addnav('`@Lock Door & Sleep (Log Out — FREE)`0', 'runmodule.php?module=personalspace&op=sleep');
+    } else {
+        addnav(['`@Lock Door & Sleep (Log Out — %sG)`0', number_format($sleepFeeNav)], 'runmodule.php?module=personalspace&op=sleep');
+    }
+    addnav('`$Bribe Borant Security (Raid Safe Room)`0', 'runmodule.php?module=personalspace&op=breach_list');
 
     addnav('Return');
     addnav('Exit to Bopca Safe Room', 'village.php');
