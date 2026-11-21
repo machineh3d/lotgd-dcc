@@ -290,4 +290,32 @@ INSERT INTO `creatures` (`creaturename`, `creaturelevel`, `creatureweapon`, `cre
 ('Recycled Season-42 NPC Husk',                 10, 'Glitched Memory Loop Blade',              'You put the malfunctioning actor out of its misery as the showrunners cut the feed.',              'Overwhelmed by a weeping NPC who suddenly remembered its real family!',                 0,  30, 100, 15, 15, 'System AI', 0, 1),
 ('Borant Tax-Evasion Liquidation Bot',          13, 'Repo-Claw & Asset Freeze Ray',            'You short-circuit the repo bot and forge your own Reconstruction Bay release papers!',             'Liquidated as a tax write-off for the Borant Corporation''s quarterly filings!',        0,  40, 130, 20, 20, 'System AI', 0, 1);
 
+
+-- ============================================================================
+-- 7. FLOOR PROGRESSION TITLES (`titles` table, Floors 1-18 / DK 0-17+)
+-- Prevents NB-Core from falling back to "God" on new accounts and awards
+-- canonical Dungeon Crawler Carl titles as players descend the Stairwells.
+-- ============================================================================
+DELETE FROM `titles`;
+
+INSERT INTO `titles` (`dk`, `male`, `female`) VALUES
+(0,  'Crawler',                'Crawler'),
+(1,  'Floor 2 Survivor',       'Floor 2 Survivor'),
+(2,  'Over City Crawler',      'Over City Crawler'),
+(3,  'Tangle Runner',          'Tangle Runner'),
+(4,  'Bubble Breaker',         'Bubble Breaker'),
+(5,  'Hunting Grounds Prey',   'Hunting Grounds Prey'),
+(6,  'Labyrinth Runner',       'Labyrinth Runner'),
+(7,  'Ghost of Earth',         'Ghost of Earth'),
+(8,  'Faction Warlord',        'Faction Warlord'),
+(9,  'Outreach Veteran',       'Outreach Veteran'),
+(10, 'Parade Survivor',        'Parade Survivor'),
+(11, 'Ascendency Challenger',  'Ascendency Challenger'),
+(12, 'Thirteenth Survivor',    'Thirteenth Survivor'),
+(13, 'Sheol Walker',           'Sheol Walker'),
+(14, 'Deep Floor Legend',      'Deep Floor Legend'),
+(15, 'Syndicate Nightmare',    'Syndicate Nightmare'),
+(16, 'Scolopendra Bane',       'Scolopendra Bane'),
+(17, 'Regent of Earth',        'Regent of Earth');
+
 COMMIT;

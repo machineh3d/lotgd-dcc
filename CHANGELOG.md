@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.2-alpha] - 2026-11-20
+
+### Fixed
+- **New Crawler Default Titles (`sql/lotgd_dcc_total_conversion.sql`)**: Populated the `titles` table with 18 canonical Dungeon Crawler Carl floor titles (`dk=0` -> `Crawler` through `dk=17` -> `Regent of Earth`) so new accounts no longer fall back to `God`.
+
 ## [v0.6.1-alpha] - 2026-11-20
 
 ### Changed
