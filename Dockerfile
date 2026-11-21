@@ -76,7 +76,7 @@ RUN set -eux; \
 
 # Native Android Client JSON API Bridge (X-DCC-Client: 1)
 COPY dcc-server-bridge/dcc_api_bridge.php /var/www/html/dcc_api_bridge.php
-RUN CONF_DIR="$(ls -d /etc/php/*/apache2/conf.d /usr/local/etc/php/conf.d 2>/dev/null | head -n 1)" && \
+RUN for d in /etc/php/*/apache2/conf.d /usr/local/etc/php/conf.d; do [ -d "$d" ] && CONF_DIR="$d" && break; done && \
     echo "auto_prepend_file = /var/www/html/dcc_api_bridge.php" > "${CONF_DIR}/99-dcc-api.ini" && \
     chown www-data:www-data /var/www/html/dcc_api_bridge.php && \
     chmod 0644 /var/www/html/dcc_api_bridge.php "${CONF_DIR}/99-dcc-api.ini"
