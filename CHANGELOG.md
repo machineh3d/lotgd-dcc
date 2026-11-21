@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.1-alpha] - 2026-11-20
+
+### Changed
+- **DCC-Branded Outgoing SMTP Emails (`sql/lotgd_dcc_shop_dialogue.sql`)**: Set `mail_from_name = Dungeon Crawler World: Earth (System AI)` and replaced stock `LotGD Account Verification` / password-reset email subjects and bodies in `settings_extended` with System AI / Borant Corporation broadcasts (preserving `{link}`, `{ip}`, and `{login}`).
+
 ## [v0.6.0-alpha] - 2026-11-20
 
 ### Added

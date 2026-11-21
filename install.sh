@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.6.0-alpha)
+# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.6.1-alpha)
 # Target Engine: Fresh LotGD NB-Core v2.0.9+ (PHP 8.4 / 8.5)
 # Repository: https://github.com/machineh3d/lotgd-dcc
 # ============================================================================
@@ -106,7 +106,7 @@ ok "Database backup complete."
 for sql_file in lotgd_dcc_total_conversion.sql lotgd_dcc_mounts.sql lotgd_dcc_taunts_deaths.sql lotgd_dcc_shop_dialogue.sql; do
     info "Importing sql/${sql_file}..."
     if [[ -n "${DB_PREFIX}" ]]; then
-        sed -E "s/\`(settings|translations|weapons|armor|masters|creatures|mounts|taunts|deathmessages)\`/\`${DB_PREFIX}\1\`/g" \
+        sed -E "s/\`(settings|settings_extended|translations|weapons|armor|masters|creatures|mounts|taunts|deathmessages)\`/\`${DB_PREFIX}\1\`/g" \
             "${SCRIPT_DIR}/sql/${sql_file}" | run_mysql
     else
         run_mysql < "${SCRIPT_DIR}/sql/${sql_file}"

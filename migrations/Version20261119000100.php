@@ -78,7 +78,7 @@ final class Version20261119000100 extends AbstractMigration
                 // Apply table prefix if configured
                 if ($prefix !== '') {
                     $trimmed = (string) preg_replace(
-                        '/`(settings|translations|weapons|armor|masters|creatures|mounts|taunts|deathmessages)`/',
+                        '/`(settings|settings_extended|translations|weapons|armor|masters|creatures|mounts|taunts|deathmessages)`/',
                         '`' . $prefix . '$1`',
                         $trimmed
                     );
