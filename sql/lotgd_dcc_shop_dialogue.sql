@@ -131,6 +131,12 @@ INSERT INTO `translations` (`language`, `uri`, `intext`, `outtext`, `author`, `v
 ('en', 'newday', 'What do you recall doing as a child?', 'Before the Collapse, what skills kept you alive when the World Dungeon opened?', 'System AI (Shop Dialogue)', '2.0.9+nb'),
 ('en', 'newday', '`c`bA little history about yourself`b`c', '`c`b`#Pre-Collapse Survival Profile`0`b`c', 'System AI (Shop Dialogue)', '2.0.9+nb'),
 ('en', 'common', 'A little history about yourself', 'Pre-Collapse Survival Profile', 'System AI (Shop Dialogue)', '2.0.9+nb'),
-('en', 'common', 'What do you recall doing as a child?', 'Before the Collapse, what skills kept you alive when the World Dungeon opened?', 'System AI (Shop Dialogue)', '2.0.9+nb');
+('en', 'common', 'What do you recall doing as a child?', 'Before the Collapse, what skills kept you alive when the World Dungeon opened?', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'superuser', 'Superuser Grotto', 'Borant Showrunner Console', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'nav', 'Superuser', 'Showrunner', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'common', 'Spirit', 'Luck', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'common', 'Spirits', 'Luck', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'charstats', 'Spirit', 'Luck', 'System AI (Shop Dialogue)', '2.0.9+nb'),
+('en', 'charstats', 'Spirits', 'Luck', 'System AI (Shop Dialogue)', '2.0.9+nb');
 
 COMMIT;

@@ -58,7 +58,7 @@ INSERT INTO `translations` (`language`, `uri`, `intext`, `outtext`, `author`, `v
 ('en', 'common', 'Clans', 'Crawler Parties', 'System AI (DCC Overhaul)', '2.0.9+nb'),
 ('en', 'common', 'Hitpoints', 'Crawler HP', 'System AI (DCC Overhaul)', '2.0.9+nb'),
 ('en', 'common', 'Charm', 'Viewer Ratings', 'System AI (DCC Overhaul)', '2.0.9+nb'),
-('en', 'common', 'Spirits', 'AI Favor', 'System AI (DCC Overhaul)', '2.0.9+nb'),
+('en', 'common', 'Spirits', 'Luck', 'System AI (DCC Overhaul)', '2.0.9+nb'),
 ('en', 'common', 'Mount', 'Pet Companion', 'System AI (DCC Overhaul)', '2.0.9+nb'),
 ('en', 'common', 'Superuser Grotto', 'Borant Showrunner Console', 'System AI (DCC Overhaul)', '2.0.9+nb'),
 ('en', 'common', 'Daily News', 'Recap Broadcast', 'System AI (DCC Overhaul)', '2.0.9+nb'),

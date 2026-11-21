@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.6-alpha] - 2026-11-20
+
+### Changed
+- **Showrunner Console & Luck Stat Renames (`sql/lotgd_dcc_total_conversion.sql`, `sql/lotgd_dcc_shop_dialogue.sql`)**: Renamed `Superuser Grotto` (`superuser` schema) to **Borant Showrunner Console**, `Superuser` (`nav` schema) to **Showrunner**, and `Spirit` / `Spirits` (`common` and `charstats` schemas) to **Luck**.
+
 ## [v0.5.5-alpha] - 2026-11-20
 
 ### Changed
