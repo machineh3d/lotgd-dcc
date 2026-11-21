@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * Dungeon Crawler World: Earth (lotgd-dcc) — Native Android JSON API Bridge (v0.2.0)
+ * Dungeon Crawler World: Earth (lotgd-dcc) — Native Android JSON API Bridge (v0.3.0)
  *
  * Loaded via PHP auto_prepend_file (/etc/php/8.4/apache2/conf.d/99-dcc-api.ini).
  * - Regular browser requests pass through untouched with zero overhead.
- * - Requests with header `X-DCC-Client: 1` (or `?dcc_json=1`) receive a clean,
- *   structured JSON representation of the rendered NB-Core LotGD page, player
- *   stats, grouped navigation links, structured data tables (vendors, bestiary,
- *   leaderboards), interactive forms, and Syndicate Comms counts.
+ * - Requests with header `X-DCC-Client: 1` (or `?dcc_json=1`) receive structured
+ *   JSON including exact HP, XP progress to next trainer challenge, Stamina,
+ *   Gold Credits, Sponsor Tokens, grouped navs, structured vendor/data tables,
+ *   interactive forms, and Syndicate Comms counts.
  */
 
 if (PHP_SAPI === 'cli') {
@@ -99,12 +99,28 @@ function dcc_api_resolve_color(string $classAttr): ?string
 }
 
 /**
- * Checks if a <table> element is a real multi-column data table (vendors,
- * bestiary, leaderboards, etc.) rather than a single-column layout wrapper.
+ * Computes exact XP required to challenge the next level trainer using NB-Core's
+ * PlayerFunctions::expForNextLevel(), with a standard LotGD fallback formula.
  */
+function dcc_api_exp_for_level(int $level, int $dks): int
+{
+    if ($level <= 0) {
+        return 0;
+    }
+    if (class_exists('\\Lotgd\\PlayerFunctions') && method_exists('\\Lotgd\\PlayerFunctions', 'expForNextLevel')) {
+        try {
+            return max(0, (int) round((float) \Lotgd\PlayerFunctions::expForNextLevel($level, $dks)));
+        } catch (\Throwable $e) {
+            // Fall through to standard formula
+        }
+    }
+    $base = [0, 100, 400, 1002, 1912, 3140, 4707, 6641, 8985, 11795, 15143, 19121, 23840, 29437, 36071, 43930];
+    $b = $base[$level] ?? ($level * $level * 200);
+    return (int) round($b + ($dks * 25 * $level));
+}
+
 function dcc_api_is_data_table(DOMXPath $xpath, DOMElement $table): bool
 {
-    // Skip tables containing forms (let NativeFormCard handle them)
     $nestedForms = $xpath->query('.//form', $table);
     if ($nestedForms !== false && $nestedForms->length > 0) {
         return false;
@@ -130,8 +146,6 @@ function dcc_api_is_data_table(DOMXPath $xpath, DOMElement $table): bool
 }
 
 /**
- * Extracts structured data tables (headers + rows + optional row action links).
- *
  * @return list<array<string, mixed>>
  */
 function dcc_api_extract_tables(DOMXPath $xpath, DOMNode $scope): array
@@ -198,7 +212,6 @@ function dcc_api_extract_tables(DOMXPath $xpath, DOMNode $scope): array
             if ($isHeaderRow) {
                 $headers = $cellTexts;
             } else {
-                // Skip completely blank rows
                 if (implode('', $cellTexts) === '') {
                     continue;
                 }
@@ -222,8 +235,6 @@ function dcc_api_extract_tables(DOMXPath $xpath, DOMNode $scope): array
 }
 
 /**
- * Recursively walks a DOM node and appends styled text spans into paragraphs.
- *
  * @param list<list<array<string, mixed>>> $paragraphs
  * @param list<array<string, mixed>>       $currentLine
  */
@@ -273,7 +284,6 @@ function dcc_api_collect_spans(
         return;
     }
 
-    // Skip data tables here since they are rendered as native structured cards
     if ($tag === 'table' && dcc_api_is_data_table($xpath, $node)) {
         return;
     }
@@ -329,8 +339,6 @@ function dcc_api_collect_spans(
 }
 
 /**
- * Extracts interactive forms from a DOM subtree into a native-friendly schema.
- *
  * @return list<array<string, mixed>>
  */
 function dcc_api_extract_forms(DOMXPath $xpath, DOMNode $scope): array
@@ -475,8 +483,6 @@ function dcc_api_extract_forms(DOMXPath $xpath, DOMNode $scope): array
 }
 
 /**
- * Extracts grouped navigation links from NB-Core's rendered sidebar nav.
- *
  * @return list<array<string, mixed>>
  */
 function dcc_api_extract_nav_groups(DOMXPath $xpath): array
@@ -554,8 +560,6 @@ function dcc_api_extract_nav_groups(DOMXPath $xpath): array
 }
 
 /**
- * Extracts right-sidebar character stat sections (including custom DCC module stats).
- *
  * @return list<array<string, mixed>>
  */
 function dcc_api_extract_char_stats(DOMXPath $xpath): array
@@ -622,8 +626,6 @@ function dcc_api_extract_char_stats(DOMXPath $xpath): array
 }
 
 /**
- * Extracts Syndicate Comms / Mail status from the header.
- *
  * @return array<string, mixed>
  */
 function dcc_api_extract_mail(DOMXPath $xpath): array
@@ -653,8 +655,6 @@ function dcc_api_extract_mail(DOMXPath $xpath): array
 }
 
 /**
- * Builds structured player stats from $session['user'] with charStats backfill.
- *
  * @param list<array<string, mixed>> $charStats
  * @return array<string, mixed>|null
  */
@@ -673,78 +673,97 @@ function dcc_api_extract_player(array $charStats): ?array
     }
 
     $dk = (int) ($u['dragonkills'] ?? 0);
+    $level = max(1, (int) ($u['level'] ?? 1));
+    $maxLevel = 15;
+    if (class_exists('\\Lotgd\\Settings') && method_exists('\\Lotgd\\Settings', 'getInstance')) {
+        try {
+            $maxLevel = (int) \Lotgd\Settings::getInstance()->getSetting('maxlevel', 15);
+        } catch (\Throwable $e) {
+            $maxLevel = 15;
+        }
+    }
 
     $player = [
-        'loggedIn'    => true,
-        'acctId'      => (int) ($u['acctid'] ?? 0),
-        'login'       => (string) ($u['login'] ?? ''),
-        'title'       => dcc_api_strip_lotgd_codes($title),
-        'name'        => $name,
-        'level'       => (int) ($u['level'] ?? 1),
-        'floor'       => $dk + 1,
-        'dragonKills' => $dk,
-        'hp'          => (int) ($u['hitpoints'] ?? 0),
-        'maxHp'       => max(1, (int) ($u['maxhitpoints'] ?? 1)),
-        'turns'       => (int) ($u['turns'] ?? 0),
-        'gold'        => (int) ($u['gold'] ?? 0),
-        'goldInBank'  => (int) ($u['goldinbank'] ?? 0),
-        'gems'        => (int) ($u['gems'] ?? 0),
-        'experience'  => (int) ($u['experience'] ?? 0),
-        'alive'       => (bool) ($u['alive'] ?? true),
-        'location'    => (string) ($u['location'] ?? 'Safe Room'),
-        'race'        => (string) ($u['race'] ?? ''),
-        'specialty'   => (string) ($u['specialty'] ?? ''),
-        'attack'      => (int) ($u['attack'] ?? 0),
-        'defense'     => (int) ($u['defense'] ?? 0),
-        'isSuperuser' => ((int) ($u['superuser'] ?? 0)) > 0,
+        'loggedIn'        => true,
+        'acctId'          => (int) ($u['acctid'] ?? 0),
+        'login'           => (string) ($u['login'] ?? ''),
+        'title'           => dcc_api_strip_lotgd_codes($title),
+        'name'            => $name,
+        'level'           => $level,
+        'maxLevel'        => max(1, $maxLevel),
+        'floor'           => $dk + 1,
+        'dragonKills'     => $dk,
+        'hp'              => (int) ($u['hitpoints'] ?? 0),
+        'maxHp'           => max(1, (int) ($u['maxhitpoints'] ?? 1)),
+        'turns'           => (int) ($u['turns'] ?? 0),
+        'gold'            => (int) ($u['gold'] ?? 0),
+        'goldInBank'      => (int) ($u['goldinbank'] ?? 0),
+        'gems'            => (int) ($u['gems'] ?? 0),
+        'experience'      => (int) ($u['experience'] ?? 0),
+        'expCurrentLevel' => 0,
+        'expNextLevel'    => 100,
+        'alive'           => (bool) ($u['alive'] ?? true),
+        'location'        => (string) ($u['location'] ?? 'Safe Room'),
+        'race'            => (string) ($u['race'] ?? ''),
+        'specialty'       => (string) ($u['specialty'] ?? ''),
+        'attack'          => (int) ($u['attack'] ?? 0),
+        'defense'         => (int) ($u['defense'] ?? 0),
+        'isSuperuser'     => ((int) ($u['superuser'] ?? 0)) > 0,
     ];
 
-    if ($player['maxHp'] <= 1 && count($charStats) > 0) {
+    if (count($charStats) > 0) {
         $flat = [];
         foreach ($charStats as $sec) {
             foreach ($sec['items'] ?? [] as $it) {
                 $flat[strtolower(trim((string) ($it['label'] ?? '')))] = trim((string) ($it['value'] ?? ''));
             }
         }
-        if (isset($flat['hitpoints']) && preg_match('/(\d+)\s*\/\s*(\d+)/', str_replace(',', '', $flat['hitpoints']), $m)) {
-            $player['hp'] = (int) $m[1];
-            $player['maxHp'] = max(1, (int) $m[2]);
-        }
-        foreach (['turns', 'stamina', 'forest fights'] as $k) {
-            if (isset($flat[$k]) && preg_match('/(\d+)/', str_replace(',', '', $flat[$k]), $m)) {
-                $player['turns'] = (int) $m[1];
-                break;
+        if ($player['maxHp'] <= 1) {
+            if (isset($flat['hitpoints']) && preg_match('/(\d+)\s*\/\s*(\d+)/', str_replace(',', '', $flat['hitpoints']), $m)) {
+                $player['hp'] = (int) $m[1];
+                $player['maxHp'] = max(1, (int) $m[2]);
+            }
+            foreach (['turns', 'stamina', 'forest fights'] as $k) {
+                if (isset($flat[$k]) && preg_match('/(\d+)/', str_replace(',', '', $flat[$k]), $m)) {
+                    $player['turns'] = (int) $m[1];
+                    break;
+                }
+            }
+            foreach (['gold credits', 'gold'] as $k) {
+                if (isset($flat[$k]) && preg_match('/(\d+)/', str_replace(',', '', $flat[$k]), $m)) {
+                    $player['gold'] = (int) $m[1];
+                    break;
+                }
+            }
+            foreach (['sponsor tokens', 'gems'] as $k) {
+                if (isset($flat[$k]) && preg_match('/(\d+)/', str_replace(',', '', $flat[$k]), $m)) {
+                    $player['gems'] = (int) $m[1];
+                    break;
+                }
+            }
+            if (isset($flat['level']) && preg_match('/(\d+)/', $flat['level'], $m)) {
+                $player['level'] = max(1, (int) $m[1]);
+            }
+            if (isset($flat['title']) && $flat['title'] !== '') {
+                $player['title'] = $flat['title'];
+            }
+            if (isset($flat['name']) && $flat['name'] !== '') {
+                $player['name'] = $flat['name'];
             }
         }
-        foreach (['gold credits', 'gold'] as $k) {
-            if (isset($flat[$k]) && preg_match('/(\d+)/', str_replace(',', '', $flat[$k]), $m)) {
-                $player['gold'] = (int) $m[1];
-                break;
-            }
-        }
-        foreach (['sponsor tokens', 'gems'] as $k) {
-            if (isset($flat[$k]) && preg_match('/(\d+)/', str_replace(',', '', $flat[$k]), $m)) {
-                $player['gems'] = (int) $m[1];
-                break;
-            }
-        }
-        if (isset($flat['level']) && preg_match('/(\d+)/', $flat['level'], $m)) {
-            $player['level'] = (int) $m[1];
-        }
-        if (isset($flat['title']) && $flat['title'] !== '') {
-            $player['title'] = $flat['title'];
-        }
-        if (isset($flat['name']) && $flat['name'] !== '') {
-            $player['name'] = $flat['name'];
+        if ($player['experience'] <= 0 && isset($flat['experience']) && preg_match('/(\d+)/', str_replace(',', '', $flat['experience']), $m)) {
+            $player['experience'] = (int) $m[1];
         }
     }
+
+    $curLvl = (int) $player['level'];
+    $player['expCurrentLevel'] = $curLvl <= 1 ? 0 : dcc_api_exp_for_level($curLvl - 1, $dk);
+    $player['expNextLevel'] = max(1, dcc_api_exp_for_level($curLvl, $dk));
 
     return $player;
 }
 
 /**
- * Classifies the current page so Android can adapt the bottom action deck.
- *
  * @param list<array<string, mixed>> $navGroups
  * @param array<string, mixed>|null  $player
  */
@@ -781,9 +800,6 @@ function dcc_api_detect_page_type(string $uri, string $title, array $navGroups, 
     return 'general';
 }
 
-/**
- * Output buffer callback: converts NB-Core HTML into structured JSON.
- */
 function dcc_api_transform_output(string $buffer): string
 {
     $code = http_response_code();
@@ -883,7 +899,7 @@ function dcc_api_transform_output(string $buffer): string
     }
 
     $payload = [
-        'apiVersion'  => 2,
+        'apiVersion'  => 3,
         'ok'          => true,
         'currentUrl'  => $uri,
         'pageType'    => $pageType,
@@ -904,7 +920,7 @@ function dcc_api_transform_output(string $buffer): string
         header_remove('Content-Length');
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store, no-cache, must-revalidate, private');
-        header('X-DCC-Bridge: 2');
+        header('X-DCC-Bridge: 3');
     }
 
     return (string) json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
