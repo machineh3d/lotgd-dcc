@@ -22,4 +22,4 @@ $output->outputNotl("&#149; <a href='petition.php?op=faq3'>`#Section 3: Technica
 HookHandler::hook('faq-toc');
 HookHandler::hook('faq-posttoc');
 
-$output->output("`n`7Good luck, Crawler. Try not to bore the sponsors.`n`#— The System AI &amp; Tutorial Guild`0`n");
+$output->output("`n`7Good luck, Crawler. Try not to bore the sponsors.`n`#— The System AI & Tutorial Guild`0`n");

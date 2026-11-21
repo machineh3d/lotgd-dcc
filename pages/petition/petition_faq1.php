@@ -8,7 +8,7 @@ use Lotgd\Translator;
 Translator::getInstance()->setSchema('faq');
 Header::popupHeader('DCC FAQ — Section 1: General Gameplay & Survival Basics');
 
-$output->output("`c`b`#SECTION 1: GENERAL GAMEPLAY &amp; SURVIVAL BASICS`b`c`0`n");
+$output->output("`c`b`#SECTION 1: GENERAL GAMEPLAY & SURVIVAL BASICS`b`c`0`n");
 $output->outputNotl("<a href='petition.php?op=faq'>&laquo; Return to FAQ Contents</a><hr/>", true);
 
 $output->output("`^`b1. What is the main goal of Dungeon Crawler World?`b`0`n");
@@ -29,6 +29,6 @@ $output->output("`7- `5Sponsor Tokens (Gems):`7 Rare premium currency used for h
 $output->output("`7- `@Loot Boxes:`7 Awarded by the System AI for achievements, Floor Quests, Boss kills, and Sponsors. Open them inside the Safe Room Loot Vault!`0`n`n");
 
 $output->output("`^`b6. Where can I learn what every area does or track monsters I have fought?`b`0`n");
-$output->output("`7Open the `#Crawler's Cookbook &amp; Bestiary`7 under `^Broadcast Feed`7 in the Safe Room Hub for an area-by-area guide, an ability directory, and a progressive Bestiary that unlocks enemy stats as you slay them.`0`n`n");
+$output->output("`7Open the `#Crawler's Cookbook & Bestiary`7 under `^Broadcast Feed`7 in the Safe Room Hub for an area-by-area guide, an ability directory, and a progressive Bestiary that unlocks enemy stats as you slay them.`0`n`n");
 
 $output->outputNotl("<hr/><a href='petition.php?op=faq'>&laquo; Return to FAQ Contents</a> | <a href='petition.php?op=faq2'>Next: Section 2 (Spoilers &amp; Deep Systems) &raquo;</a>", true);
