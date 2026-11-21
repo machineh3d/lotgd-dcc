@@ -492,7 +492,7 @@ function personalspace_run(): void
                 } else {
                     $session['user']['gold'] -= $bribeGold;
                     $session['user']['gems'] -= $bribeGems;
-                    $villageName = db_escape((string) getsetting('villagename', 'Bopca Safe Room Hub'));
+                    $villageName = \Lotgd\MySQL\Database::escape((string) getsetting('villagename', 'Bopca Safe Room Hub'));
                     db_query("UPDATE {$accountsTable} SET boughtroomtoday = 0, location = '{$villageName}' WHERE acctid = {$targetId}");
 
                     output("`$`b[SAFE ROOM BLAST DOOR OVERRIDDEN!]:`b `@You wired `^%s Gold Credits`2 and `5%d Sponsor Tokens`2 to a shady Borant Producer! A loud hydraulic hiss echoes down the corridor—`^%s`2\'s Safe Room door is now WIDE OPEN and they are exposed in the Crawler PvP Arena!`0`n`n", number_format($bribeGold), $bribeGems, (string) $target['name']);

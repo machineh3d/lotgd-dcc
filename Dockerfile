@@ -73,10 +73,3 @@ RUN set -eux; \
     chown -R www-data:www-data /var/www/html/modules /var/www/html/templates_twig/dcc_hud /var/www/html/templates_twig/dcc_hud_minimal /var/www/html/templates_twig/dcc_hud_mobile; \
     chmod 0644 /var/www/html/modules/*.php; \
     rm -rf /var/www/html/cache/* /var/www/html/datacache/* /var/www/html/data/cache/* 2>/dev/null || true
-
-# Native Android Client JSON API Bridge (X-DCC-Client: 1)
-COPY dcc-server-bridge/dcc_api_bridge.php /var/www/html/dcc_api_bridge.php
-RUN for d in /etc/php/*/apache2/conf.d /usr/local/etc/php/conf.d; do [ -d "$d" ] && CONF_DIR="$d" && break; done && \
-    echo "auto_prepend_file = /var/www/html/dcc_api_bridge.php" > "${CONF_DIR}/99-dcc-api.ini" && \
-    chown www-data:www-data /var/www/html/dcc_api_bridge.php && \
-    chmod 0644 /var/www/html/dcc_api_bridge.php "${CONF_DIR}/99-dcc-api.ini"

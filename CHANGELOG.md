@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.4-alpha] - 2026-11-20
+
+### Fixed
+- **NB-Core v2 Database Escaping (`modules/dccfeedback.php`, `modules/personalspace.php`)**: Replaced removed legacy `db_escape()` calls with `\Lotgd\MySQL\Database::escape()` so Alpha Feedback submissions and Safe Room Breach Bribes work cleanly without Application Errors.
+
 ## [v0.6.3-alpha] - 2026-11-20
 
 ### Changed

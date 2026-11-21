@@ -262,13 +262,13 @@ function dccfeedback_run(): void
                 "INSERT INTO `%s` (`acctid`, `crawler_name`, `level`, `floor_num`, `skin`, `category`, `area`, `message`, `status`) VALUES (%d, '%s', %d, %d, '%s', '%s', '%s', '%s', 'open')",
                 $table,
                 $acctId,
-                db_escape(substr($cleanName, 0, 120)),
+                \Lotgd\MySQL\Database::escape(substr($cleanName, 0, 120)),
                 $level,
                 $floorNum,
-                db_escape(substr($skin, 0, 80)),
-                db_escape(substr($category, 0, 40)),
-                db_escape(substr($area, 0, 120)),
-                db_escape(substr($message, 0, 4000))
+                \Lotgd\MySQL\Database::escape(substr($skin, 0, 80)),
+                \Lotgd\MySQL\Database::escape(substr($category, 0, 40)),
+                \Lotgd\MySQL\Database::escape(substr($area, 0, 120)),
+                \Lotgd\MySQL\Database::escape(substr($message, 0, 4000))
             );
             db_query($sql);
 
