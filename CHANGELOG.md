@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.0-alpha] - 2026-11-20
+
+### Added
+- **Alpha Playtest Feedback & Bug Reporter (`modules/dccfeedback.php`)**: In-game feedback form (`Broadcast Feed -> Alpha Feedback & Bug Report`) with categories (Bug, Spelling/Typo, Balance, Suggestion, UI/Mobile, General), automatic Crawler/Floor/Skin metadata capture, optional 1/day Bronze Loot Box thank-you perk, and a built-in **Alpha Feedback Inbox** in the Borant Showrunner Console with Open/Resolved filtering.
+
 ## [v0.5.6-alpha] - 2026-11-20
 
 ### Changed
