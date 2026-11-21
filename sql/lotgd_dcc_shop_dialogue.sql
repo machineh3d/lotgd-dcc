@@ -17,6 +17,7 @@ INSERT INTO `settings` (`setting`, `value`) VALUES
 ('enabletranslation', '1'),
 ('defaultlanguage', 'en'),
 ('gamename', 'Dungeon Crawler World: Earth'),
+('servername', 'Dungeon Crawler World: Earth'),
 ('meta_description', 'Dungeon Crawler World: Earth — Borant Corporation Syndicate Broadcast'),
 ('mail_from_name', 'Dungeon Crawler World: Earth (System AI)')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
@@ -149,8 +150,8 @@ INSERT INTO `translations` (`language`, `uri`, `intext`, `outtext`, `author`, `v
 -- ============================================================================
 INSERT INTO `settings_extended` (`setting`, `value`) VALUES
 ('verificationmailsubject', 'Dungeon Crawler World: Earth — Crawler Biometric Verification'),
-('verificationmailtext', 'WELCOME, CRAWLER {login}!\n\nYour surface-survivor registration for Dungeon Crawler World: Earth is almost complete. Click the Syndicate verification link below to activate your Crawler HUD and enter Floor One:\n\n{gameurl}?val={validationid}&id={acctid}\n\nGood luck in the World Dungeon. Try not to bore the sponsors.\n— The System AI & Borant Corporation'),
+('verificationmailtext', 'WELCOME, CRAWLER {login}!\n\nYour surface-survivor registration for Dungeon Crawler World: Earth is almost complete. Click the Syndicate verification link below to activate your Crawler HUD and enter Floor One:\n\n{gameurl}?op=val&id={validationid}\n\nGood luck in the World Dungeon. Try not to bore the sponsors.\n— The System AI & Borant Corporation'),
 ('forgottenpasswordmailsubject', 'Dungeon Crawler World: Earth — HUD Credential Reset'),
-('forgottenpasswordmailtext', 'A Crawler HUD credential reset was requested from {requester_ip} for your Dungeon Crawler World: Earth account. If this was you, click the link below to log in and set a new password from your Preferences page:\n\n{gameurl}?op=forgot&val={forgottenid}&id={acctid}\n\nYour registered Crawler login name is: {login}\n\nIf you did not request this reset, you can safely ignore this broadcast.\n— The System AI & Borant Corporation')
+('forgottenpasswordmailtext', 'A Crawler HUD credential reset was requested from {requester_ip} for your Dungeon Crawler World: Earth account. If this was you, click the link below to log in and set a new password from your Preferences page:\n\n{gameurl}?op=forgotval&id={forgottenid}\n\nYour registered Crawler login name is: {login}\n\nIf you did not request this reset, you can safely ignore this broadcast.\n— The System AI & Borant Corporation')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 COMMIT;
