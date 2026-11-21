@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.5-alpha] - 2026-11-20
+
+### Changed
+- **Cleaned Footer & Mod Attribution (`themes/`, `Dockerfile`, `install.sh`)**: Replaced the stock 2-column footer across all 3 DCC themes (`dcc_hud`, `dcc_hud_minimal`, `dcc_hud_mobile`) with a sleek centered bar featuring your **Dungeon Crawler World: Earth — Total Conversion by Devin Falconer (machineh3d)** credit and GitHub link alongside compact LotGD engine attribution.
+
 ## [v0.5.4-alpha] - 2026-11-20
 
 ### Added

@@ -67,6 +67,7 @@ RUN set -eux; \
     cat /tmp/dcc_themes/dcc_hud_mobile/dcc_syndicate_hud_mobile.css >> /var/www/html/templates_twig/dcc_hud_mobile/assets/style.css; \
     printf '.login-hero{display:none!important;height:0!important;min-height:0!important;padding:0!important;margin:0!important;}.page-header{min-height:0!important;height:auto!important;padding:10px 16px!important;background-image:none!important;align-items:center!important;}\n' \
         >> /var/www/html/templates_twig/dcc_hud_minimal/assets/style.css; \
+    php -r '$r = "<footer class=\"bootstrap-footer row\"><div class=\"col-12\"><div class=\"dcc-mod-credit\">&#9679; Dungeon Crawler World: Earth &mdash; Total Conversion by <a href=\"https://github.com/machineh3d/lotgd-dcc\" target=\"_blank\" rel=\"noopener\">Devin Falconer (machineh3d)</a></div><div class=\"dcc-engine-meta\">{{ copyright|raw }} &middot; {{ version }} &middot; {{ pagegen|raw }}</div></div></footer>"; foreach (["dcc_hud","dcc_hud_minimal","dcc_hud_mobile"] as $t) { $f = "/var/www/html/templates_twig/$t/page.twig"; if (is_file($f)) { file_put_contents($f, preg_replace("~<footer class=\"bootstrap-footer row\">.*?</footer>~s", $r, file_get_contents($f))); } }'; \
     rm -rf /tmp/dcc_themes; \
     chown -R www-data:www-data /var/www/html/modules /var/www/html/templates_twig/dcc_hud /var/www/html/templates_twig/dcc_hud_minimal /var/www/html/templates_twig/dcc_hud_mobile; \
     chmod 0644 /var/www/html/modules/*.php; \
