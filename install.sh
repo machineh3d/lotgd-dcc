@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.6.2-alpha)
+# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.6.3-alpha)
 # Target Engine: Fresh LotGD NB-Core v2.0.9+ (PHP 8.4 / 8.5)
 # Repository: https://github.com/machineh3d/lotgd-dcc
 # ============================================================================

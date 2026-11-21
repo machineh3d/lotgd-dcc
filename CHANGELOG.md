@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.3-alpha] - 2026-11-20
+
+### Changed
+- **Separate Title & Name Fields in Character Stats (`Dockerfile`)**: Displays `Title` in its own field directly above `Name` in the Character Info sidebar, stripping the duplicate title prefix from `Name`.
+
 ## [v0.6.2-alpha] - 2026-11-20
 
 ### Fixed
