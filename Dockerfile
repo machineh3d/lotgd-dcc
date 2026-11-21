@@ -35,11 +35,13 @@ COPY themes/dcc_hud/config.json /tmp/dcc_themes/dcc_hud/config.json
 COPY themes/dcc_hud/dcc_syndicate_hud.css /tmp/dcc_themes/dcc_hud/dcc_syndicate_hud.css
 COPY themes/dcc_hud_minimal/config.json /tmp/dcc_themes/dcc_hud_minimal/config.json
 COPY themes/dcc_hud_minimal/dcc_syndicate_hud_minimal.css /tmp/dcc_themes/dcc_hud_minimal/dcc_syndicate_hud_minimal.css
+COPY themes/dcc_hud_mobile/config.json /tmp/dcc_themes/dcc_hud_mobile/config.json
+COPY themes/dcc_hud_mobile/dcc_syndicate_hud_mobile.css /tmp/dcc_themes/dcc_hud_mobile/dcc_syndicate_hud_mobile.css
 
 RUN set -eux; \
-    for theme in dcc_hud dcc_hud_minimal; do \
+    for theme in dcc_hud dcc_hud_minimal dcc_hud_mobile; do \
         rm -rf "/var/www/html/templates_twig/${theme}"; \
-        if [ -d "/var/www/html/templates_twig/aurora_minimal" ] && [ "${theme}" = "dcc_hud_minimal" ]; then \
+        if [ -d "/var/www/html/templates_twig/aurora_minimal" ] && [ "${theme}" = "dcc_hud_minimal" ] || [ "${theme}" = "dcc_hud_mobile" ]; then \
             cp -a "/var/www/html/templates_twig/aurora_minimal" "/var/www/html/templates_twig/${theme}"; \
             sed -i "s|templates_twig/aurora_minimal|templates_twig/${theme}|g" "/var/www/html/templates_twig/${theme}/"*.twig; \
         else \
@@ -49,20 +51,23 @@ RUN set -eux; \
     done; \
     sed -i 's|<div class="login-hero"></div>||g' \
         /var/www/html/templates_twig/dcc_hud/login*.twig \
-        /var/www/html/templates_twig/dcc_hud_minimal/login*.twig; \
+        /var/www/html/templates_twig/dcc_hud_minimal/login*.twig /var/www/html/templates_twig/dcc_hud_mobile/login*.twig; \
     sed -i -E 's~<img[^>]*nav-(top|bottom)\.png[^>]*>~~g' \
-        /var/www/html/templates_twig/dcc_hud_minimal/page.twig; \
+        /var/www/html/templates_twig/dcc_hud_minimal/page.twig /var/www/html/templates_twig/dcc_hud_mobile/page.twig; \
     sed -i -E 's|<img[^>]*title-logo\.png[^>]*>|<div style="color:#00f0ff;font-family:Consolas,monospace;font-weight:900;font-size:1.25rem;letter-spacing:1.5px;">&#9679; DUNGEON CRAWLER WORLD</div>|g' \
-        /var/www/html/templates_twig/dcc_hud_minimal/page.twig; \
+        /var/www/html/templates_twig/dcc_hud_minimal/page.twig /var/www/html/templates_twig/dcc_hud_mobile/page.twig; \
     cp /tmp/dcc_themes/dcc_hud/config.json /var/www/html/templates_twig/dcc_hud/config.json; \
     cp /tmp/dcc_themes/dcc_hud/dcc_syndicate_hud.css /var/www/html/templates_twig/dcc_hud/assets/dcc_syndicate_hud.css; \
     cat /tmp/dcc_themes/dcc_hud/dcc_syndicate_hud.css >> /var/www/html/templates_twig/dcc_hud/assets/style.css; \
     cp /tmp/dcc_themes/dcc_hud_minimal/config.json /var/www/html/templates_twig/dcc_hud_minimal/config.json; \
     cp /tmp/dcc_themes/dcc_hud_minimal/dcc_syndicate_hud_minimal.css /var/www/html/templates_twig/dcc_hud_minimal/assets/dcc_syndicate_hud_minimal.css; \
     cat /tmp/dcc_themes/dcc_hud_minimal/dcc_syndicate_hud_minimal.css >> /var/www/html/templates_twig/dcc_hud_minimal/assets/style.css; \
+    cp /tmp/dcc_themes/dcc_hud_mobile/config.json /var/www/html/templates_twig/dcc_hud_mobile/config.json; \
+    cp /tmp/dcc_themes/dcc_hud_mobile/dcc_syndicate_hud_mobile.css /var/www/html/templates_twig/dcc_hud_mobile/assets/dcc_syndicate_hud_mobile.css; \
+    cat /tmp/dcc_themes/dcc_hud_mobile/dcc_syndicate_hud_mobile.css >> /var/www/html/templates_twig/dcc_hud_mobile/assets/style.css; \
     printf '.login-hero{display:none!important;height:0!important;min-height:0!important;padding:0!important;margin:0!important;}.page-header{min-height:0!important;height:auto!important;padding:10px 16px!important;background-image:none!important;align-items:center!important;}\n' \
         >> /var/www/html/templates_twig/dcc_hud_minimal/assets/style.css; \
     rm -rf /tmp/dcc_themes; \
-    chown -R www-data:www-data /var/www/html/modules /var/www/html/templates_twig/dcc_hud /var/www/html/templates_twig/dcc_hud_minimal; \
+    chown -R www-data:www-data /var/www/html/modules /var/www/html/templates_twig/dcc_hud /var/www/html/templates_twig/dcc_hud_minimal /var/www/html/templates_twig/dcc_hud_mobile; \
     chmod 0644 /var/www/html/modules/*.php; \
     rm -rf /var/www/html/cache/* /var/www/html/datacache/* /var/www/html/data/cache/* 2>/dev/null || true

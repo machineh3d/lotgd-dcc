@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.5.3-alpha)
+# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.5.4-alpha)
 # Target Engine: Fresh LotGD NB-Core v2.0.9+ (PHP 8.4 / 8.5)
 # Repository: https://github.com/machineh3d/lotgd-dcc
 # ============================================================================
@@ -135,7 +135,7 @@ ok "DCC FAQ pages installed."
 # 4. Build & Install NB-Core Twig Themes (dcc_hud & dcc_hud_minimal)
 info "Installing Twig themes (dcc_hud & dcc_hud_minimal) from aurora base..."
 run_web "
-for theme in dcc_hud dcc_hud_minimal; do
+for theme in dcc_hud dcc_hud_minimal dcc_hud_mobile; do
   rm -rf '${LOTGD_ROOT}/templates_twig/'\${theme}
   if [ -d '${LOTGD_ROOT}/templates_twig/aurora_minimal' ] && [ \"\${theme}\" = 'dcc_hud_minimal' ]; then
     cp -a '${LOTGD_ROOT}/templates_twig/aurora_minimal' '${LOTGD_ROOT}/templates_twig/'\${theme}
@@ -154,10 +154,13 @@ copy_to_web "${SCRIPT_DIR}/themes/dcc_hud/config.json" "${LOTGD_ROOT}/templates_
 copy_to_web "${SCRIPT_DIR}/themes/dcc_hud/dcc_syndicate_hud.css" "${LOTGD_ROOT}/templates_twig/dcc_hud/assets/dcc_syndicate_hud.css"
 copy_to_web "${SCRIPT_DIR}/themes/dcc_hud_minimal/config.json" "${LOTGD_ROOT}/templates_twig/dcc_hud_minimal/config.json"
 copy_to_web "${SCRIPT_DIR}/themes/dcc_hud_minimal/dcc_syndicate_hud_minimal.css" "${LOTGD_ROOT}/templates_twig/dcc_hud_minimal/assets/dcc_syndicate_hud_minimal.css"
+copy_to_web "${SCRIPT_DIR}/themes/dcc_hud_mobile/config.json" "${LOTGD_ROOT}/templates_twig/dcc_hud_mobile/config.json"
+copy_to_web "${SCRIPT_DIR}/themes/dcc_hud_mobile/dcc_syndicate_hud_mobile.css" "${LOTGD_ROOT}/templates_twig/dcc_hud_mobile/assets/dcc_syndicate_hud_mobile.css"
 
 run_web "
 cat '${LOTGD_ROOT}/templates_twig/dcc_hud/assets/dcc_syndicate_hud.css' >> '${LOTGD_ROOT}/templates_twig/dcc_hud/assets/style.css'
 cat '${LOTGD_ROOT}/templates_twig/dcc_hud_minimal/assets/dcc_syndicate_hud_minimal.css' >> '${LOTGD_ROOT}/templates_twig/dcc_hud_minimal/assets/style.css'
+cat '${LOTGD_ROOT}/templates_twig/dcc_hud_mobile/assets/dcc_syndicate_hud_mobile.css' >> '${LOTGD_ROOT}/templates_twig/dcc_hud_mobile/assets/style.css'
 printf '.login-hero{display:none!important;height:0!important;min-height:0!important;padding:0!important;margin:0!important;}.page-header{min-height:0!important;height:auto!important;padding:10px 16px!important;background-image:none!important;align-items:center!important;}\n' >> '${LOTGD_ROOT}/templates_twig/dcc_hud_minimal/assets/style.css'
 "
 

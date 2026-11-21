@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.5.4-alpha] - 2026-11-20
+
+### Added
+- **Mobile-First Theme (`themes/dcc_hud_mobile`)**: Added optional `Syndicate Pocket HUD (Mobile DCC)` skin with 44px thumb-friendly Menu/Stats toggles, large tap targets for nav buttons, horizontally scrollable tables, zero horizontal overflow, and sticky compact header.
+
+### Fixed
+- Set `innfee = 5` in `sql/lotgd_dcc_total_conversion.sql` to avoid upstream NB-Core `inn_room.php` PHP 8.4 non-numeric warning.
+
 ## [v0.5.3-alpha] - 2026-11-20
 
 ### Added

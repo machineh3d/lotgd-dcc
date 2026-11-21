@@ -31,7 +31,8 @@ INSERT INTO `settings` (`setting`, `value`) VALUES
 ('ToggleRamius', '1'),
 ('moneydecimal', '0'),
 ('enabletranslation', '1'),
-('defaultlanguage', 'en')
+('defaultlanguage', 'en'),
+('innfee', '5')
 ON DUPLICATE KEY UPDATE `value` = VALUES(`value`);
 
 -- ============================================================================
