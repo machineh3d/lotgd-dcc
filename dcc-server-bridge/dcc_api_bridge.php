@@ -138,7 +138,7 @@ function dcc_api_new_day_timing(string $plainTextFallback = ''): array
 
     if (class_exists('\\Lotgd\\DateTime') && method_exists('\\Lotgd\\DateTime', 'secondsToNextGameDay')) {
         try {
-            $next = max(0, (int) \Lotgd\DateTime::secondsToNextGameDay());
+            $rawNext = (int) \Lotgd\DateTime::secondsToNextGameDay(); $next = ($rawNext > $perDay) ? (($rawNext > time()) ? ($rawNext - time()) : 0) : max(0, $rawNext);
         } catch (\Throwable $e) {
             $next = 0;
         }
