@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * Dungeon Crawler World: Earth (lotgd-dcc) — Native Android JSON API Bridge (v0.3.0)
+ * Dungeon Crawler World: Earth (lotgd-dcc) — Native Android JSON API Bridge (v0.4.0)
  *
  * Loaded via PHP auto_prepend_file (/etc/php/8.4/apache2/conf.d/99-dcc-api.ini).
  * - Regular browser requests pass through untouched with zero overhead.
  * - Requests with header `X-DCC-Client: 1` (or `?dcc_json=1`) receive structured
  *   JSON including exact HP, XP progress to next trainer challenge, Stamina,
- *   Gold Credits, Sponsor Tokens, grouped navs, structured vendor/data tables,
- *   interactive forms, and Syndicate Comms counts.
+ *   Gold Credits, Sponsor Tokens, next new-day countdown seconds, grouped navs,
+ *   structured vendor/data tables, interactive forms, and Syndicate Comms counts.
  */
 
 if (PHP_SAPI === 'cli') {
@@ -33,8 +33,6 @@ if (!defined('DCC_API_BRIDGE_ACTIVE')) {
 }
 
 /**
- * Maps NB-Core LotGD CSS color classes (templates/common/colors.css) to hex.
- *
  * @return array<string, string>
  */
 function dcc_api_color_map(): array
@@ -98,10 +96,6 @@ function dcc_api_resolve_color(string $classAttr): ?string
     return null;
 }
 
-/**
- * Computes exact XP required to challenge the next level trainer using NB-Core's
- * PlayerFunctions::expForNextLevel(), with a standard LotGD fallback formula.
- */
 function dcc_api_exp_for_level(int $level, int $dks): int
 {
     if ($level <= 0) {
@@ -111,12 +105,66 @@ function dcc_api_exp_for_level(int $level, int $dks): int
         try {
             return max(0, (int) round((float) \Lotgd\PlayerFunctions::expForNextLevel($level, $dks)));
         } catch (\Throwable $e) {
-            // Fall through to standard formula
+            // Fall through
         }
     }
     $base = [0, 100, 400, 1002, 1912, 3140, 4707, 6641, 8985, 11795, 15143, 19121, 23840, 29437, 36071, 43930];
     $b = $base[$level] ?? ($level * $level * 200);
     return (int) round($b + ($dks * 25 * $level));
+}
+
+/**
+ * Computes real-time seconds until the next in-game day and the length of one
+ * in-game day in real-time seconds, using NB-Core's Settings/DateTime classes.
+ *
+ * @return array{next: int, perDay: int}
+ */
+function dcc_api_new_day_timing(string $plainTextFallback = ''): array
+{
+    $daysPerDay = 4;
+    $gameOffset = 0;
+    if (class_exists('\\Lotgd\\Settings') && method_exists('\\Lotgd\\Settings', 'getInstance')) {
+        try {
+            $s = \Lotgd\Settings::getInstance();
+            $daysPerDay = max(1, (int) $s->getSetting('daysperday', 4));
+            $gameOffset = (int) $s->getSetting('gameoffsetseconds', 0);
+        } catch (\Throwable $e) {
+            // Keep defaults
+        }
+    }
+
+    $perDay = (int) round(86400 / $daysPerDay);
+    $next = 0;
+
+    if (class_exists('\\Lotgd\\DateTime') && method_exists('\\Lotgd\\DateTime', 'secondsToNextGameDay')) {
+        try {
+            $next = max(0, (int) \Lotgd\DateTime::secondsToNextGameDay());
+        } catch (\Throwable $e) {
+            $next = 0;
+        }
+    }
+
+    if ($next <= 0 && function_exists('secondstonextgameday')) {
+        try {
+            $next = max(0, (int) secondstonextgameday());
+        } catch (\Throwable $e) {
+            $next = 0;
+        }
+    }
+
+    // Fallback: parse "Next new game day in: Xh, Ym, Zs" if present on page
+    if ($next <= 0 && $plainTextFallback !== '' && preg_match('/(\d+)h,\s*(\d+)m,\s*(\d+)s/i', $plainTextFallback, $m)) {
+        $next = ((int) $m[1] * 3600) + ((int) $m[2] * 60) + (int) $m[3];
+    }
+
+    // Deterministic LotGD fallback using daysperday + gameoffsetseconds
+    if ($next <= 0 && $perDay > 0) {
+        $now = time() + $gameOffset;
+        $elapsed = $now % $perDay;
+        $next = max(1, $perDay - $elapsed);
+    }
+
+    return ['next' => $next, 'perDay' => $perDay];
 }
 
 function dcc_api_is_data_table(DOMXPath $xpath, DOMElement $table): bool
@@ -848,7 +896,9 @@ function dcc_api_transform_output(string $buffer): string
     $currentLine = [];
     $forms = [];
     $tables = [];
+    $plainFallback = '';
     if ($mainScope !== null) {
+        $plainFallback = $mainScope->textContent ?? '';
         $tables = dcc_api_extract_tables($xpath, $mainScope);
         dcc_api_collect_spans($xpath, $mainScope, $paragraphs, $currentLine);
         if (count($currentLine) > 0) {
@@ -866,6 +916,7 @@ function dcc_api_transform_output(string $buffer): string
     $mail = dcc_api_extract_mail($xpath);
     $player = dcc_api_extract_player($charStats);
     $pageType = dcc_api_detect_page_type($uri, $title, $navGroups, $player);
+    $timing = dcc_api_new_day_timing($plainFallback);
 
     if ($pageType === 'combat') {
         $forms = array_values(array_filter($forms, static function (array $fm): bool {
@@ -899,20 +950,22 @@ function dcc_api_transform_output(string $buffer): string
     }
 
     $payload = [
-        'apiVersion'  => 3,
-        'ok'          => true,
-        'currentUrl'  => $uri,
-        'pageType'    => $pageType,
-        'title'       => $title,
-        'badnav'      => $pageType === 'badnav',
-        'recoveryUrl' => 'badnav.php',
-        'player'      => $player,
-        'mail'        => $mail,
-        'navGroups'   => $navGroups,
-        'charStats'   => $charStats,
-        'paragraphs'  => $paragraphs,
-        'tables'      => $tables,
-        'forms'       => $forms,
+        'apiVersion'        => 4,
+        'ok'                => true,
+        'currentUrl'        => $uri,
+        'pageType'          => $pageType,
+        'title'             => $title,
+        'badnav'            => $pageType === 'badnav',
+        'recoveryUrl'       => 'badnav.php',
+        'nextNewDaySeconds' => $timing['next'],
+        'secondsPerGameDay' => $timing['perDay'],
+        'player'            => $player,
+        'mail'              => $mail,
+        'navGroups'         => $navGroups,
+        'charStats'         => $charStats,
+        'paragraphs'        => $paragraphs,
+        'tables'            => $tables,
+        'forms'             => $forms,
     ];
 
     if (!headers_sent()) {
@@ -920,7 +973,7 @@ function dcc_api_transform_output(string $buffer): string
         header_remove('Content-Length');
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store, no-cache, must-revalidate, private');
-        header('X-DCC-Bridge: 3');
+        header('X-DCC-Bridge: 4');
     }
 
     return (string) json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
