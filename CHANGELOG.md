@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.2-alpha] - 2026-11-20
+
+### Fixed
+- **FAQ Color Codes & Backtick Cleanup (`pages/petition/petition_faq*.php`)**: Replaced accidental Markdown backticks with proper LotGD color codes (`^...`7 / `#...`7) and escaped `\$` red color codes across all FAQ pages.
+
 ## [v0.5.1-alpha] - 2026-11-20
 
 ### Added
