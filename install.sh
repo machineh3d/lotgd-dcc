@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================================
-# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.5.0-alpha)
+# DUNGEON CRAWLER CARL — TOTAL CONVERSION INSTALLER (Release v0.5.1-alpha)
 # Target Engine: Fresh LotGD NB-Core v2.0.9+ (PHP 8.4 / 8.5)
 # Repository: https://github.com/machineh3d/lotgd-dcc
 # ============================================================================
@@ -123,6 +123,14 @@ for mod in "${SCRIPT_DIR}"/modules/*.php; do
 done
 run_web "rm -f '${LOTGD_ROOT}/modules/raceelf.php' '${LOTGD_ROOT}/modules/racedwarf.php' '${LOTGD_ROOT}/modules/racetroll.php' '${LOTGD_ROOT}/modules/racehuman.php' '${LOTGD_ROOT}/modules/oldman.php' '${LOTGD_ROOT}/modules/statue.php' '${LOTGD_ROOT}/modules/fairy.php' '${LOTGD_ROOT}/modules/specialtydarkarts.php' '${LOTGD_ROOT}/modules/specialtymysticpower.php' '${LOTGD_ROOT}/modules/specialtythiefskills.php' && chmod 0644 '${LOTGD_ROOT}/modules/'*.php"
 ok "All 14 modules installed."
+
+# 3b. Install Revamped DCC FAQ Pages
+info "Installing revamped DCC FAQ pages into ${LOTGD_ROOT}/pages/petition/..."
+for faq in "${SCRIPT_DIR}"/pages/petition/petition_faq*.php; do
+    copy_to_web "${faq}" "${LOTGD_ROOT}/pages/petition/$(basename "${faq}")"
+done
+run_web "chmod 0644 '${LOTGD_ROOT}/pages/petition/'petition_faq*.php"
+ok "DCC FAQ pages installed."
 
 # 4. Build & Install NB-Core Twig Themes (dcc_hud & dcc_hud_minimal)
 info "Installing Twig themes (dcc_hud & dcc_hud_minimal) from aurora base..."

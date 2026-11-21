@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.1-alpha] - 2026-11-20
+
+### Added
+- **Revamped Dungeon Crawler World FAQ (`pages/petition/petition_faq*.php`)**: Replaced all 4 stock medieval LotGD FAQ pages (`faq`, `faq1`, `faq2`, `faq3`) with a complete Borant Corporation / System AI Crawler FAQ covering Floor 1 survival basics, Floors 1-18, Specialties/Races/Classes, Bosses, Personal Space, Sponsors, Faction Wars, Secret Achievements, and HUD troubleshooting.
+
 ## [v0.5.0-alpha] - 2026-11-20
 
 ### Added

@@ -27,7 +27,7 @@ jobs:
 
       - name: Lint all PHP modules
         run: |
-          for f in modules/*.php migrations/*.php; do
+          for f in modules/*.php migrations/*.php pages/petition/*.php; do
             echo "Checking $f..."
             php -l "$f"
           done
@@ -60,7 +60,7 @@ jobs:
         run: |
           TAG="${GITHUB_REF_NAME}"
           mkdir -p dist/lotgd-dcc-pack
-          cp -r VERSION CHANGELOG.md README.md install.sh Dockerfile docker-compose.yml .env.example .gitignore sql modules migrations themes docker .github dist/lotgd-dcc-pack/
+          cp -r VERSION CHANGELOG.md README.md install.sh Dockerfile docker-compose.yml .env.example .gitignore sql modules migrations pages themes docker .github dist/lotgd-dcc-pack/
           cd dist
           zip -r "lotgd-dcc-${TAG}.zip" lotgd-dcc-pack
           ls -lh "lotgd-dcc-${TAG}.zip"

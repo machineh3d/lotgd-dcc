@@ -22,6 +22,7 @@ RUN rm -f /var/www/html/modules/raceelf.php \
           /var/www/html/modules/specialtymysticpower.php \
           /var/www/html/modules/specialtythiefskills.php
 COPY modules/*.php /var/www/html/modules/
+COPY pages/petition/petition_faq*.php /var/www/html/pages/petition/
 
 # 2. Bake SQL lore packs & helper script for post-install / upgrade seeding
 COPY sql/ /opt/lotgd-dcc/sql/
